@@ -7,3 +7,6 @@ dist/
 .pytest_cache/
 .vscode/
 .idea/
+
+# Camera RAW samples for ingest integration tests (downloaded, not versioned)
+python/tests/fixtures_ingest/raw/
