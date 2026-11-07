@@ -5,12 +5,9 @@
 [build]
   base    = "web"
   publish = "."
-  # styles.css ya está compilado y commiteado; este comando lo regenera
-  # en cada deploy para que nunca quede desfasado del HTML.
-  command = "npm run build:css"
-
-[build.environment]
-  NODE_VERSION = "22"
+  # Sitio 100% estático: styles.css ya está compilado y commiteado
+  # (regenerarlo localmente con `npm run build:css` dentro de web/).
+  command = "echo 'static site, nothing to build'"
 
 # ---------- Cabeceras de seguridad (todas las rutas) ----------
 [[headers]]
