@@ -1,0 +1,8 @@
+"""PyInstaller entry point: CTDPhotoStudio.exe (windowed GUI)."""
+
+import sys
+
+from fraw.gui.app import main
+
+if __name__ == "__main__":
+    sys.exit(main())

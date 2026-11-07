@@ -10,7 +10,7 @@ readme = { text = "FabriRAW (.fraw / .frw / .fset) reference implementation. See
 requires-python = ">=3.10"
 license = { text = "MIT" }
 authors = [{ name = "FabriCTD" }]
-dependencies = ["numpy"]
+dependencies = ["numpy", "scipy"]
 
 [project.optional-dependencies]
 ingest = ["rawpy", "pillow"]
@@ -27,6 +27,9 @@ Homepage = "https://fraw.fabrictd.com"
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["fraw*"]
+
+[tool.setuptools.package-data]
+"fraw.gui" = ["theme.qss", "icon.png"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

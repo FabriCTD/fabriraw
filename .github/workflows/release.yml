@@ -1,0 +1,86 @@
+name: Release (Windows portable)
+
+on:
+  push:
+    tags: ["v*.*.*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  portable:
+    name: CTD Photo Studio portable (win64)
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install
+        # scipy: fraw.demosaic depends on scipy.ndimage (not declared in pyproject dependencies).
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e "python[gui,ingest]" pyinstaller scipy pytest
+
+      - name: Test
+        env:
+          QT_QPA_PLATFORM: offscreen
+        working-directory: python
+        run: python -m pytest -q
+
+      - name: Build portable
+        run: python packaging/build_portable.py
+
+      - name: Smoke-test the executables
+        shell: pwsh
+        run: |
+          $app = "dist/CTD Photo Studio"
+          & "$app/ctd-raw.exe" --version
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+          & "$app/ctd-raw.exe" info tests/fixtures/golden.fraw
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+          & "$app/ctd-raw.exe" develop tests/fixtures/golden.fraw -o dist/smoke.jpg
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+          Remove-Item dist/smoke.jpg
+
+      - name: Checksums
+        shell: pwsh
+        run: |
+          $h = (Get-FileHash dist/CTD-Photo-Studio-Portable-win64.zip -Algorithm SHA256).Hash.ToLower()
+          "$h  CTD-Photo-Studio-Portable-win64.zip" | Out-File -Encoding ascii dist/SHA256SUMS.txt
+          Get-Content dist/SHA256SUMS.txt
+
+      - name: Release notes
+        shell: pwsh
+        run: |
+          $ver = if ($env:GITHUB_REF_TYPE -eq "tag") { $env:GITHUB_REF_NAME } else { "build manual ($env:GITHUB_SHA)" }
+          @"
+          ## CTD Photo Studio $ver — portable para Windows (64 bits)
+
+          > Construido 100% con [Claude](https://claude.com/claude-code) (Anthropic) a partir de un único prompt de FabriCTD:
+          > formato FabriRAW, código, tests, empaquetado y este release automático.
+
+          **Descarga:** `CTD-Photo-Studio-Portable-win64.zip` — descomprimí y abrí `CTDPhotoStudio.exe`
+          (no requiere instalación). Incluye `ctd-raw.exe` para la línea de comandos.
+          Verificá la descarga con `SHA256SUMS.txt`.
+
+          * Abre `.fraw` / `.frw` / `.fset` e importa RAW de cámara (CR3, CR2, NEF, ARW, DNG, ORF, RW2, PEF…).
+          * Revelado no destructivo guardado en el chunk DEV, exportación JPEG/PNG/TIFF 8/16 bits.
+          * Licencias de terceros (Qt/PySide6 LGPL-3.0, LibRaw LGPL-2.1/CDDL-1.0, …) en `THIRD_PARTY_NOTICES.md`.
+
+          Sitio: https://fraw.fabrictd.com
+          "@ | Out-File -Encoding utf8 dist/RELEASE_NOTES.md
+
+      - name: GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_type == 'tag' && github.ref_name || format('build-{0}', github.run_number) }}
+          name: ${{ github.ref_type == 'tag' && format('CTD Photo Studio {0}', github.ref_name) || format('CTD Photo Studio build {0}', github.run_number) }}
+          prerelease: ${{ github.ref_type != 'tag' }}
+          body_path: dist/RELEASE_NOTES.md
+          files: |
+            dist/CTD-Photo-Studio-Portable-win64.zip
+            dist/SHA256SUMS.txt
