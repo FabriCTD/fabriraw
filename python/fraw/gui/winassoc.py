@@ -6,6 +6,7 @@ executed when the user clicks the menu item. Nothing is written to HKLM.
 
 from __future__ import annotations
 
+import ntpath
 import os
 import sys
 
@@ -23,7 +24,7 @@ def available() -> bool:
 
 def registry_plan(exe: str) -> list[tuple[str, str | None, str]]:
     """[(subkey under HKCU, value name (None = default), data)] that :func:`register` writes."""
-    exe = os.path.abspath(exe)
+    exe = ntpath.abspath(exe)  # rutas del registro siempre son de Windows
     plan: list[tuple[str, str | None, str]] = [
         (rf"{_ROOT}\{PROGID}", None, "Imagen FabriRAW (CTD Photo Studio)"),
         (rf"{_ROOT}\{PROGID}\DefaultIcon", None, f'"{exe}",0'),
