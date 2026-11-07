@@ -95,7 +95,7 @@ Nota: el ID de color es **`COLR`** (los IDs son exactamente 4 bytes; `COLOR` tie
 | 56 | u32 | crop_height | |
 | 60 | u32 | reserved1 | |
 
-Validaciones: `width,height ≥ 2` y pares; `bits_per_sample == 16`; `effective_bits ∈ [8,16]`; cada `cfa_pattern[i] ∈ {0,1,2}` y contiene al menos un 0, un 1 y un 2; `max(black_level) < white_level ≤ 65535`; si hay crop, debe caber en la imagen.
+Validaciones: `width,height ≥ 2` y pares; `bits_per_sample == 16`; `effective_bits ∈ [10,16]`; `compression ∈ {0,1}`; `orientation ∈ [1,8]`; `sample_layout == 0`; cada `cfa_pattern[i] ∈ {0,1,2}` y contiene al menos un 0, un 1 y un 2; `max(black_level) < white_level ≤ 65535`; si hay crop, debe caber en la imagen.
 
 ### 4.2 META — JSON
 
@@ -188,3 +188,12 @@ Mismo framing y CRC que `.fraw`. `frame_count` DEBE coincidir con la cantidad de
 ## 7. Errores normativos
 
 `BadMagic`, `Truncated`, `CorruptChunk` (CRC), `UnsupportedVersion`, `UnsupportedCriticalChunk`, `MissingChunk`, `DuplicateChunk`, `BadOrder`, `InvalidHeader`, `SizeMismatch`.
+
+Aclaraciones normativas (v1.0):
+
+* `CorruptChunk` también cubre: JSON inválido en META/DEV/SETH (o raíz no-objeto), stream zlib corrupto, ID de chunk no imprimible, y un chunk conocido cuyo bit CRITICAL no coincide con la tabla §3.1.
+* EOF sin `END ` ⇒ `Truncated`. Bytes después de `END ` ⇒ `BadOrder`. `END ` con length ≠ 0 ⇒ `SizeMismatch`.
+* Cualquier chunk antes de `HEAD` ⇒ `BadOrder`. El CRC se verifica antes que la semántica.
+* THMB se valida aunque no sea crítico (format, dimensiones, `data_length`).
+* Defensa anti zip-bomb: si `w·h·2 / 1032 > len(stream zlib)` se rechaza con `SizeMismatch` sin reservar memoria.
+* Errores de E/S del sistema operativo no son `FrawError`.

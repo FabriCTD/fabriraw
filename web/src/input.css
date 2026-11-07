@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ---------- Base ---------- */
+@layer base {
+  :root { color-scheme: dark; }
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body { @apply bg-ink-950 text-mute-strong font-sans antialiased; overflow-x: hidden; }
+  h1, h2, h3, h4 { @apply font-display text-white tracking-tight; }
+  ::selection { background: #f0b232; color: #09080c; }
+  a { @apply underline-offset-4; }
+  :focus-visible { outline: 2px solid #f0b232; outline-offset: 3px; border-radius: 4px; }
+  code, kbd, samp, pre { @apply font-mono; }
+  [id] { scroll-margin-top: 5rem; }
+  /* Evita que <pre>/tablas ensanchen las columnas de grid/flex en móvil */
+  .grid > *, .flex > * { min-width: 0; }
+}
+
+/* ---------- i18n: español por defecto; inglés oculto hasta que el toggle lo active ---------- */
+[data-l="en"] { display: none !important; }
+html[data-lang="en"] [data-l="en"] { display: revert !important; }
+html[data-lang="en"] [data-l="es"] { display: none !important; }
+
+/* ---------- Components ---------- */
+@layer components {
+  .wrap { @apply mx-auto w-full max-w-page px-4 sm:px-6 lg:px-8; }
+  .section { @apply py-16 sm:py-24; }
+  .eyebrow { @apply font-mono text-xs uppercase tracking-[0.2em] text-amber; }
+  .h2 { @apply mt-3 text-3xl font-bold sm:text-4xl; }
+  .lead { @apply mt-4 max-w-2xl text-base leading-relaxed text-mute sm:text-lg; }
+  .card { @apply rounded-2xl border border-ink-700 bg-ink-850 p-6; }
+  .btn { @apply inline-flex items-center justify-center gap-2 rounded-2xl px-5 py-3 text-sm font-semibold no-underline transition-colors; }
+  .btn-primary { @apply btn bg-white text-ink-950 hover:bg-amber; }
+  .btn-ghost { @apply btn border border-ink-700 bg-ink-850 text-white hover:border-amber; }
+  .link { @apply text-amber underline decoration-amber/40 hover:decoration-amber; }
+  .pill { @apply inline-flex items-center gap-2 rounded-full border border-ink-700 bg-ink-850 px-3 py-1 font-mono text-xs text-mute-strong; }
+  .codeblock { @apply overflow-x-auto rounded-xl border border-ink-700 bg-ink-900 p-4 font-mono text-[13px] leading-relaxed text-mute-strong; }
+  .tbl { @apply w-full border-collapse text-left text-sm; }
+  .tbl th { @apply border-b border-ink-600 bg-ink-800 px-3 py-2 font-display font-semibold text-white; }
+  .tbl td { @apply border-b border-ink-700 px-3 py-2 align-top; }
+  .tbl-wrap { @apply overflow-x-auto rounded-xl border border-ink-700; }
+  .chunk { @apply flex flex-col gap-1 rounded-lg border px-3 py-2 font-mono text-xs; }
+  .prose-legal h2 { @apply mt-10 text-2xl font-bold; }
+  .prose-legal h3 { @apply mt-6 text-lg font-semibold; }
+  .prose-legal p, .prose-legal li { @apply mt-3 leading-relaxed text-mute-strong; }
+  .prose-legal ul { @apply ml-5 list-disc; }
+  .prose-legal a { @apply link; }
+  .prose-legal pre { @apply codeblock mt-4 whitespace-pre-wrap; }
+}

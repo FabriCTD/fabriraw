@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  core:
+    name: C++ core (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure
+        run: cmake -S core -B core/build -DCMAKE_BUILD_TYPE=Release
+      - name: Build
+        run: cmake --build core/build --config Release --parallel
+      - name: Test
+        run: ctest --test-dir core/build -C Release --output-on-failure
+
+  python:
+    name: Python (${{ matrix.os }}, ${{ matrix.python }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python: ["3.11", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Build C++ tool (for cross-compat tests)
+        run: |
+          cmake -S core -B core/build -DCMAKE_BUILD_TYPE=Release
+          cmake --build core/build --config Release --parallel
+      - name: Install
+        run: pip install -e "python[dev,ingest]"
+      - name: Install Qt runtime deps (Linux)
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y libegl1 libxkbcommon0 libgl1
+      - name: Install GUI extra
+        run: pip install -e "python[gui]"
+      - name: Test
+        env:
+          QT_QPA_PLATFORM: offscreen
+        working-directory: python
+        run: python -m pytest -q

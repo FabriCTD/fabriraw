@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <title>FabriRAW</title>
+  <rect x="1" y="1" width="62" height="62" rx="14" fill="#09080c" stroke="#2e2d33" stroke-width="2"/>
+  <path fill="#ffffff" d="M13 11h29v9H23v7h16v8H23v18H13z"/>
+  <rect x="36" y="38" width="8" height="8" rx="1.5" fill="#e5484d"/>
+  <rect x="45" y="38" width="8" height="8" rx="1.5" fill="#3fb950"/>
+  <rect x="36" y="47" width="8" height="8" rx="1.5" fill="#3fb950"/>
+  <rect x="45" y="47" width="8" height="8" rx="1.5" fill="#4c8dff"/>
+  <rect x="42" y="11" width="11" height="9" rx="1.5" fill="#f0b232"/>
+</svg>

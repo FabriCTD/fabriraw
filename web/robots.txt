@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://fraw.fabrictd.com/sitemap.xml

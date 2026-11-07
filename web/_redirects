@@ -1,0 +1,14 @@
+# Redirecciones de fraw.fabrictd.com (Netlify). Formato: origen  destino  código
+# No hace falta una regla catch-all para el 404: Netlify sirve /404.html
+# automáticamente (con estado 404) cuando una ruta no existe.
+
+/download    https://github.com/FabriCTD/fabriraw/releases/latest/download/CTD-Photo-Studio-Portable-win64.zip  302
+/descargar   https://github.com/FabriCTD/fabriraw/releases/latest/download/CTD-Photo-Studio-Portable-win64.zip  302
+/releases    https://github.com/FabriCTD/fabriraw/releases  302
+/github      https://github.com/FabriCTD/fabriraw  302
+/spec        /#spec  302
+/issues      https://github.com/FabriCTD/fabriraw/issues  302
+
+# Discord no tiene URL pública de perfil por nombre de usuario (fabri.ctd);
+# se redirige al sitio principal, donde figura el contacto.
+/discord     https://fabrictd.com  302

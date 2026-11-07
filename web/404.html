@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es" data-lang="es"
+      data-title-es="404 · Chunk no encontrado · FabriRAW"
+      data-title-en="404 · Chunk not found · FabriRAW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>404 · Chunk no encontrado · FabriRAW</title>
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#09080c">
+  <meta name="color-scheme" content="dark">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/styles.css?v=1.0.0">
+  <script src="/assets/app.js?v=1.0.0" defer></script>
+</head>
+<body class="flex min-h-screen flex-col">
+  <header class="border-b border-ink-700">
+    <div class="wrap flex h-16 items-center justify-between gap-4">
+      <a href="/" class="flex items-center gap-2 font-display text-lg font-bold text-white no-underline">
+        <img src="/assets/favicon.svg" alt="" width="28" height="28"><span>FabriRAW</span>
+      </a>
+      <span data-js-only hidden>
+        <button type="button" data-lang-toggle aria-pressed="false" class="rounded-xl border border-ink-700 bg-ink-850 px-3 py-2 font-mono text-xs text-white hover:border-amber">
+          <span data-l="es"><span class="sr-only">Switch to English</span><span aria-hidden="true">EN</span></span><span data-l="en" lang="es"><span class="sr-only">Cambiar a español</span><span aria-hidden="true">ES</span></span>
+        </button>
+      </span>
+    </div>
+  </header>
+  <main id="main" class="wrap flex flex-1 flex-col justify-center py-16">
+    <p class="font-mono text-sm text-amber">error: MissingChunk · 404</p>
+    <h1 class="mt-4 text-5xl font-bold sm:text-7xl">404</h1>
+    <p class="mt-4 text-xl text-white" data-l="es">Este chunk no está en el archivo.</p>
+    <p class="mt-4 text-xl text-white" data-l="en" lang="en">This chunk isn't in the file.</p>
+    <p class="mt-3 max-w-xl text-mute" data-l="es">La página que buscas no existe o cambió de lugar. Falta este chunk, pero tus fotos están a salvo.</p>
+    <p class="mt-3 max-w-xl text-mute" data-l="en" lang="en">The page you are looking for doesn't exist or has moved. This chunk is missing, but your photos are safe.</p>
+    <pre class="codeblock mt-8 max-w-xl" aria-hidden="true"><code>00000000  46 52 41 57 0D 0A 1A 0A  FRAW....
+00000008  3F 3F 3F 3F 00 00 00 00  ????....
+          ^^^^^^^^^^^ unknown chunk id</code></pre>
+    <div class="mt-8 flex flex-wrap gap-3">
+      <a class="btn-primary" href="/"><span data-l="es">Volver al inicio</span><span data-l="en" lang="en">Back to home</span></a>
+      <a class="btn-ghost" href="/#spec"><span data-l="es">Ver la especificación</span><span data-l="en" lang="en">See the spec</span></a>
+      <a class="btn-ghost" href="https://github.com/FabriCTD/fabriraw">GitHub</a>
+    </div>
+  </main>
+  <footer class="border-t border-ink-700">
+    <div class="wrap py-6 text-sm text-mute">
+      <p>© 2026 FabriCTD · <a class="link" href="/legal/terminos.html">Términos</a> · <a class="link" href="/legal/privacidad.html">Privacidad</a> · <span data-l="es">Construido por</span><span data-l="en" lang="en">Built by</span> <a class="link" href="https://claude.com/claude-code">Claude (Anthropic)</a></p>
+    </div>
+  </footer>
+</body>
+</html>

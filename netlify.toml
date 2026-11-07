@@ -1,0 +1,44 @@
+# Netlify — fraw.fabrictd.com
+# base = "web": Netlify entra en web/ antes de construir. Las rutas de publish
+# (y del resto de este archivo) se resuelven RELATIVAS a base, así que
+# publish = "." publica el contenido de web/.
+[build]
+  base    = "web"
+  publish = "."
+  # styles.css ya está compilado y commiteado; este comando lo regenera
+  # en cada deploy para que nunca quede desfasado del HTML.
+  command = "npm run build:css"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# ---------- Cabeceras de seguridad (todas las rutas) ----------
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Content-Security-Policy = "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'none'; upgrade-insecure-requests"
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
+    Strict-Transport-Security = "max-age=63072000; includeSubDomains"
+    Cross-Origin-Opener-Policy = "same-origin"
+
+# ---------- Caché ----------
+# Los HTML se revalidan siempre (Netlify invalida la CDN en cada deploy).
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# assets/ y styles.css: caché larga. Los nombres no llevan hash: el HTML los referencia con
+# ?v=X.Y.Z; al cambiarlos hay que subir ese número en todos los HTML.
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/styles.css"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"

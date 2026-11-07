@@ -1,0 +1,16 @@
+{
+  "name": "fraw-fabrictd-web",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Landing estática de FabriRAW (.fraw) · CTD Photo Studio — https://fraw.fabrictd.com",
+  "license": "MIT",
+  "scripts": {
+    "build:css": "tailwindcss -c tailwind.config.js -i ./src/input.css -o ./styles.css --minify",
+    "watch:css": "tailwindcss -c tailwind.config.js -i ./src/input.css -o ./styles.css --watch",
+    "check:links": "node scripts/check-links.mjs",
+    "serve": "npx --yes serve@14.2.4 -l 4173 ."
+  },
+  "devDependencies": {
+    "tailwindcss": "3.4.19"
+  }
+}

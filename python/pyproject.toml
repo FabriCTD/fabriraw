@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fabriraw"
+version = "0.1.0"
+description = "FabriRAW (.fraw) open RAW format and CTD Photo Studio tools by FabriCTD"
+readme = { text = "FabriRAW (.fraw / .frw / .fset) reference implementation. See https://fraw.fabrictd.com", content-type = "text/plain" }
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "FabriCTD" }]
+dependencies = ["numpy"]
+
+[project.optional-dependencies]
+ingest = ["rawpy"]
+gui = ["PySide6"]
+dev = ["pytest"]
+
+[project.scripts]
+ctd-raw = "fraw.cli:main"
+ctd-studio = "fraw.gui.app:main"
+
+[project.urls]
+Homepage = "https://fraw.fabrictd.com"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["fraw*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

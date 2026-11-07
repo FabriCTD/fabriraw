@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="es" data-lang="es"
+      data-title-es="FabriRAW (.fraw) · CTD Photo Studio — formato RAW abierto"
+      data-title-en="FabriRAW (.fraw) · CTD Photo Studio — open RAW format">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FabriRAW (.fraw) · CTD Photo Studio — formato RAW abierto</title>
+  <meta name="description" content="FabriRAW (.fraw) es un formato RAW abierto y sin pérdida: mosaico Bayer sin interpolar, CRC por chunk, revelado no destructivo y ráfagas .fset. CTD Photo Studio lo ingesta desde CR3, NEF y ARW. Gratis y MIT.">
+  <meta name="author" content="FabriCTD">
+  <meta name="theme-color" content="#09080c">
+  <meta name="color-scheme" content="dark">
+  <link rel="canonical" href="https://fraw.fabrictd.com/">
+  <link rel="alternate" hreflang="es" href="https://fraw.fabrictd.com/">
+  <link rel="alternate" hreflang="x-default" href="https://fraw.fabrictd.com/">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/styles.css?v=1.0.0">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="FabriRAW · CTD Photo Studio">
+  <meta property="og:locale" content="es_AR">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:url" content="https://fraw.fabrictd.com/">
+  <meta property="og:title" content="FabriRAW (.fraw) — formato RAW abierto · CTD Photo Studio">
+  <meta property="og:description" content="Formato RAW abierto y sin pérdida, con CRC por chunk y revelado no destructivo. Construido íntegramente por Claude (Anthropic) a partir de un único prompt de FabriCTD.">
+  <meta property="og:image" content="https://fraw.fabrictd.com/assets/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="FabriRAW (.fraw) · CTD Photo Studio — formato RAW abierto">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="FabriRAW (.fraw) — formato RAW abierto">
+  <meta name="twitter:description" content="Mosaico Bayer sin interpolar, CRC por chunk, revelado no destructivo, ráfagas .fset. MIT.">
+  <meta name="twitter:image" content="https://fraw.fabrictd.com/assets/og.png">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "CTD Photo Studio",
+    "alternateName": "FabriRAW (.fraw)",
+    "description": "Suite de código abierto para ingestar RAW de cámara (CR3, NEF, ARW) al formato abierto FabriRAW (.fraw) y revelarlos de forma no destructiva.",
+    "url": "https://fraw.fabrictd.com/",
+    "downloadUrl": "https://github.com/FabriCTD/fabriraw/releases/latest/download/CTD-Photo-Studio-Portable-win64.zip",
+    "applicationCategory": "MultimediaApplication",
+    "operatingSystem": "Windows 10, Windows 11",
+    "license": "https://opensource.org/licenses/MIT",
+    "isAccessibleForFree": true,
+    "codeRepository": "https://github.com/FabriCTD/fabriraw",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "author": { "@type": "Person", "name": "FabriCTD", "url": "https://fabrictd.com" },
+    "inLanguage": ["es", "en"]
+  }
+  </script>
+  <script src="/assets/app.js?v=1.0.0" defer></script>
+</head>
+<body>
+  <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:text-ink-950">
+    <span data-l="es">Saltar al contenido</span><span data-l="en" lang="en">Skip to content</span>
+  </a>
+
+  <!-- ===================== HEADER ===================== -->
+  <header class="sticky top-0 z-40 border-b border-ink-700/80 bg-ink-950/90 backdrop-blur">
+    <div class="wrap flex h-16 items-center justify-between gap-4">
+      <a href="/" class="flex items-center gap-2 font-display text-lg font-bold text-white no-underline">
+        <img src="/assets/favicon.svg" alt="" width="28" height="28">
+        <span>FabriRAW</span><span class="hidden font-normal text-mute sm:inline">· CTD Photo Studio</span>
+      </a>
+      <nav aria-label="Principal" class="hidden items-center gap-6 text-sm md:flex">
+        <a class="text-mute-strong no-underline hover:text-white" href="#que-es"><span data-l="es">Formato</span><span data-l="en" lang="en">Format</span></a>
+        <a class="text-mute-strong no-underline hover:text-white" href="#features"><span data-l="es">Ventajas</span><span data-l="en" lang="en">Features</span></a>
+        <a class="text-mute-strong no-underline hover:text-white" href="#comparativa"><span data-l="es">Comparativa</span><span data-l="en" lang="en">Compare</span></a>
+        <a class="text-mute-strong no-underline hover:text-white" href="#spec"><span data-l="es">Especificación</span><span data-l="en" lang="en">Spec</span></a>
+        <a class="text-mute-strong no-underline hover:text-white" href="#faq">FAQ</a>
+      </nav>
+      <div class="flex items-center gap-2">
+        <span data-js-only hidden>
+          <button type="button" data-lang-toggle aria-pressed="false" class="rounded-xl border border-ink-700 bg-ink-850 px-3 py-2 font-mono text-xs text-white hover:border-amber">
+            <span data-l="es"><span class="sr-only">Switch to English</span><span aria-hidden="true">EN</span></span><span data-l="en" lang="es"><span class="sr-only">Cambiar a español</span><span aria-hidden="true">ES</span></span>
+          </button>
+        </span>
+        <a href="#descargas" class="btn-primary hidden px-4 py-2 sm:inline-flex"><span data-l="es">Descargar</span><span data-l="en" lang="en">Download</span></a>
+        <details id="mobile-menu" class="relative md:hidden">
+          <summary class="list-none cursor-pointer rounded-xl border border-ink-700 bg-ink-850 px-3 py-2 font-mono text-xs text-white [&::-webkit-details-marker]:hidden">
+            <span data-l="es">Menú</span><span data-l="en" lang="en">Menu</span>
+          </summary>
+          <nav aria-label="Móvil" class="absolute right-0 mt-2 w-56 rounded-2xl border border-ink-700 bg-ink-850 p-2 shadow-2xl">
+            <a class="block rounded-lg px-3 py-2 text-white no-underline hover:bg-ink-700" href="#que-es"><span data-l="es">Formato</span><span data-l="en" lang="en">Format</span></a>
+            <a class="block rounded-lg px-3 py-2 text-white no-underline hover:bg-ink-700" href="#features"><span data-l="es">Ventajas</span><span data-l="en" lang="en">Features</span></a>
+            <a class="block rounded-lg px-3 py-2 text-white no-underline hover:bg-ink-700" href="#pipeline">Pipeline</a>
+            <a class="block rounded-lg px-3 py-2 text-white no-underline hover:bg-ink-700" href="#comparativa"><span data-l="es">Comparativa</span><span data-l="en" lang="en">Compare</span></a>
+            <a class="block rounded-lg px-3 py-2 text-white no-underline hover:bg-ink-700" href="#spec"><span data-l="es">Especificación</span><span data-l="en" lang="en">Spec</span></a>
+            <a class="block rounded-lg px-3 py-2 text-white no-underline hover:bg-ink-700" href="#descargas"><span data-l="es">Descargas</span><span data-l="en" lang="en">Downloads</span></a>
+            <a class="block rounded-lg px-3 py-2 text-white no-underline hover:bg-ink-700" href="#claude"><span data-l="es">Hecho con Claude</span><span data-l="en" lang="en">Made with Claude</span></a>
+            <a class="block rounded-lg px-3 py-2 text-white no-underline hover:bg-ink-700" href="#faq">FAQ</a>
+          </nav>
+        </details>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ===================== HERO ===================== -->
+    <section class="relative overflow-hidden border-b border-ink-700" aria-labelledby="hero-title">
+      <div class="wrap grid items-center gap-12 py-16 sm:py-24 lg:grid-cols-[1.15fr_0.85fr]">
+        <div>
+          <p class="pill"><span class="h-2 w-2 rounded-full bg-signal" aria-hidden="true"></span>FabriRAW v1.0 · CTD Photo Studio</p>
+          <h1 id="hero-title" class="mt-6 text-4xl font-bold leading-[1.05] sm:text-6xl">
+            <span data-l="es">El RAW de tu cámara, en un formato <span class="text-amber">abierto y verificable</span>.</span>
+            <span data-l="en" lang="en">Your camera RAW, in an <span class="text-amber">open, verifiable</span> format.</span>
+          </h1>
+          <p class="lead" data-l="es">
+            <strong class="text-white">FabriRAW (.fraw)</strong> guarda el mosaico Bayer del sensor tal cual, sin interpolar y sin pérdida, con un CRC-32 por bloque y el revelado no destructivo dentro del mismo archivo. <strong class="text-white">CTD Photo Studio</strong> convierte tus CR3, NEF y ARW y los revela.
+          </p>
+          <p class="lead" data-l="en" lang="en">
+            <strong class="text-white">FabriRAW (.fraw)</strong> stores the sensor's Bayer mosaic as-is — not interpolated, lossless — with a CRC-32 per chunk and non-destructive develop settings inside the same file. <strong class="text-white">CTD Photo Studio</strong> converts your CR3, NEF and ARW files and develops them.
+          </p>
+          <div class="mt-8 flex flex-wrap gap-3">
+            <a class="btn-primary" href="https://github.com/FabriCTD/fabriraw/releases/latest/download/CTD-Photo-Studio-Portable-win64.zip">
+              <span data-l="es">Descargar para Windows</span><span data-l="en" lang="en">Download for Windows</span>
+            </a>
+            <a class="btn-ghost" href="https://github.com/FabriCTD/fabriraw"><span data-l="es">Código en GitHub</span><span data-l="en" lang="en">Source on GitHub</span></a>
+            <a class="btn-ghost" href="#spec"><span data-l="es">Leer la especificación</span><span data-l="en" lang="en">Read the spec</span></a>
+          </div>
+          <p class="mt-8 max-w-xl rounded-2xl border border-amber/30 bg-amber/5 p-4 text-sm leading-relaxed text-mute-strong">
+            <span data-l="es"><strong class="text-amber">Hecho 100% por Claude (Anthropic).</strong> Formato, código, tests, esta web y la documentación fueron construidos por Claude a partir de un único prompt inicial de FabriCTD. <a class="link" href="#claude">Cómo y por qué</a>.</span>
+            <span data-l="en" lang="en"><strong class="text-amber">Built 100% by Claude (Anthropic).</strong> The format, code, tests, this website and the docs were built by Claude from a single initial prompt by FabriCTD. <a class="link" href="#claude">How and why</a>.</span>
+          </p>
+        </div>
+        <!-- Visual: mosaico Bayer RGGB + magic -->
+        <div class="mx-auto w-full max-w-sm" aria-hidden="true">
+          <div class="card p-4">
+            <svg viewBox="0 0 160 160" class="h-auto w-full" role="presentation">
+              <defs>
+                <pattern id="bayer" width="20" height="20" patternUnits="userSpaceOnUse">
+                  <rect x="0" y="0" width="10" height="10" fill="#e5484d" opacity=".85"/>
+                  <rect x="10" y="0" width="10" height="10" fill="#3fb950" opacity=".85"/>
+                  <rect x="0" y="10" width="10" height="10" fill="#3fb950" opacity=".85"/>
+                  <rect x="10" y="10" width="10" height="10" fill="#4c8dff" opacity=".85"/>
+                </pattern>
+                <linearGradient id="fade" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stop-color="#09080c" stop-opacity="0"/>
+                  <stop offset="1" stop-color="#09080c" stop-opacity=".9"/>
+                </linearGradient>
+              </defs>
+              <rect width="160" height="160" rx="10" fill="url(#bayer)"/>
+              <rect width="160" height="160" rx="10" fill="url(#fade)"/>
+              <rect x="0.5" y="0.5" width="159" height="159" rx="10" fill="none" stroke="#222124"/>
+            </svg>
+            <div class="mt-4 font-mono text-xs leading-6 text-mute">
+              <div><span class="text-amber">00000000</span>  46 52 41 57 0D 0A 1A 0A</div>
+              <div><span class="text-amber">00000008</span>  48 45 41 44 01 00 00 00</div>
+              <div><span class="text-amber">00000010</span>  40 00 00 00 00 00 00 00</div>
+              <div class="text-mute-strong">FRAW␍␊␚␊ HEAD · CRITICAL · 64 B</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== QUÉ ES ===================== -->
+    <section id="que-es" class="section" aria-labelledby="que-es-title">
+      <div class="wrap grid gap-10 lg:grid-cols-2">
+        <div>
+          <p class="eyebrow"><span data-l="es">Qué es .fraw</span><span data-l="en" lang="en">What is .fraw</span></p>
+          <h2 id="que-es-title" class="h2"><span data-l="es">Un contenedor RAW simple, documentado y sin secretos</span><span data-l="en" lang="en">A simple, documented RAW container with no secrets</span></h2>
+          <div data-l="es">
+            <p class="lead">Los RAW propietarios (CR3, NEF, ARW) cambian con cada cámara y su estructura se conoce, en gran parte, por ingeniería inversa. FabriRAW toma los datos del sensor y los guarda en un formato cuya especificación completa cabe en una página.</p>
+            <p class="lead">El archivo es una secuencia de <em>chunks</em> con identificador de 4 bytes, longitud y CRC-32, al estilo PNG. Se puede leer con unas decenas de líneas de código en cualquier lenguaje.</p>
+          </div>
+          <div data-l="en" lang="en">
+            <p class="lead">Proprietary RAWs (CR3, NEF, ARW) change with every camera, and their structure is known largely through reverse engineering. FabriRAW takes the sensor data and stores it in a format whose full specification fits on one page.</p>
+            <p class="lead">The file is a sequence of <em>chunks</em> with a 4-byte ID, a length and a CRC-32, PNG-style. It can be read with a few dozen lines of code in any language.</p>
+          </div>
+        </div>
+        <div class="card">
+          <h3 class="text-lg font-semibold"><span data-l="es">Extensiones</span><span data-l="en" lang="en">Extensions</span></h3>
+          <dl class="mt-4 space-y-4 text-sm">
+            <div><dt class="font-mono text-amber">.fraw</dt><dd class="mt-1 text-mute-strong"><span data-l="es">Archivo FabriRAW principal (una imagen).</span><span data-l="en" lang="en">Main FabriRAW file (one image).</span></dd></div>
+            <div><dt class="font-mono text-amber">.frw</dt><dd class="mt-1 text-mute-strong"><span data-l="es">Idéntico byte a byte a .fraw; extensión corta (8.3).</span><span data-l="en" lang="en">Byte-for-byte identical to .fraw; short (8.3) extension.</span></dd></div>
+            <div><dt class="font-mono text-amber">.fset</dt><dd class="mt-1 text-mute-strong"><span data-l="es">Contenedor de ráfaga: N archivos .fraw embebidos.</span><span data-l="en" lang="en">Burst container: N embedded .fraw files.</span></dd></div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== FEATURES ===================== -->
+    <section id="features" class="section border-t border-ink-700 bg-ink-900" aria-labelledby="features-title">
+      <div class="wrap">
+        <p class="eyebrow"><span data-l="es">Ventajas</span><span data-l="en" lang="en">Features</span></p>
+        <h2 id="features-title" class="h2"><span data-l="es">Pensado para archivar fotos durante décadas</span><span data-l="en" lang="en">Designed to archive photos for decades</span></h2>
+        <ul class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <li class="card">
+            <h3 class="text-lg font-semibold"><span data-l="es">Sin pérdida</span><span data-l="en" lang="en">Lossless</span></h3>
+            <p class="mt-2 text-sm leading-relaxed text-mute" data-l="es">Muestras de 16 bits tal como salen del sensor. Compresión opcional zlib (RFC 1950), que descomprime exactamente a los mismos valores.</p>
+            <p class="mt-2 text-sm leading-relaxed text-mute" data-l="en" lang="en">16-bit samples exactly as they come off the sensor. Optional zlib compression (RFC 1950) that decompresses to the exact same values.</p>
+          </li>
+          <li class="card">
+            <h3 class="text-lg font-semibold"><span data-l="es">Bayer sin interpolar</span><span data-l="en" lang="en">Non-interpolated Bayer</span></h3>
+            <p class="mt-2 text-sm leading-relaxed text-mute" data-l="es">El chunk DATA guarda el mosaico CFA 2×2 crudo, sin restar el negro y sin demosaico. El revelado se decide después, no al convertir.</p>
+            <p class="mt-2 text-sm leading-relaxed text-mute" data-l="en" lang="en">The DATA chunk stores the raw 2×2 CFA mosaic, without black subtraction and without demosaicing. Developing happens later, not at conversion time.</p>
+          </li>
+          <li class="card">
+            <h3 class="text-lg font-semibold"><span data-l="es">CRC por chunk</span><span data-l="en" lang="en">Per-chunk CRC</span></h3>
+            <p class="mt-2 text-sm leading-relaxed text-mute" data-l="es">Cada bloque lleva un CRC-32 (IEEE 802.3, el de zlib) sobre su ID y su payload. Un bit dañado se detecta y se informa como <code>CorruptChunk</code>.</p>
+            <p class="mt-2 text-sm leading-relaxed text-mute" data-l="en" lang="en">Every chunk carries a CRC-32 (IEEE 802.3, zlib's) over its ID and payload. A flipped bit is detected and reported as <code>CorruptChunk</code>.</p>
+          </li>
+          <li class="card">
+            <h3 class="text-lg font-semibold"><span data-l="es">Revelado no destructivo</span><span data-l="en" lang="en">Non-destructive develop</span></h3>
+            <p class="mt-2 text-sm leading-relaxed text-mute" data-l="es">Exposición, balance de blancos, contraste, saturación y curva viven en el chunk <code>DEV&nbsp;</code> (JSON), ubicado después de DATA: editar sólo reescribe la cola del archivo.</p>
+            <p class="mt-2 text-sm leading-relaxed text-mute" data-l="en" lang="en">Exposure, white balance, contrast, saturation and tone curve live in the <code>DEV&nbsp;</code> chunk (JSON), placed after DATA: editing only rewrites the tail of the file.</p>
+          </li>
+          <li class="card">
+            <h3 class="text-lg font-semibold"><span data-l="es">Ráfagas .fset</span><span data-l="en" lang="en">.fset bursts</span></h3>
+            <p class="mt-2 text-sm leading-relaxed text-mute" data-l="es">Un contenedor con el mismo framing y CRC que agrupa N archivos .fraw completos de una ráfaga, con un encabezado JSON <code>SETH</code>.</p>
+            <p class="mt-2 text-sm leading-relaxed text-mute" data-l="en" lang="en">A container with the same framing and CRC that bundles N complete .fraw files from a burst, with a JSON <code>SETH</code> header.</p>
+          </li>
+          <li class="card">
+            <h3 class="text-lg font-semibold"><span data-l="es">Open-source MIT</span><span data-l="en" lang="en">MIT open source</span></h3>
+            <p class="mt-2 text-sm leading-relaxed text-mute" data-l="es">Especificación pública y código bajo licencia MIT. Cualquiera puede leer, escribir e implementar el formato sin pedir permiso.</p>
+            <p class="mt-2 text-sm leading-relaxed text-mute" data-l="en" lang="en">Public specification and MIT-licensed code. Anyone can read, write and implement the format without asking for permission.</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ===================== PIPELINE ===================== -->
+    <section id="pipeline" class="section" aria-labelledby="pipeline-title">
+      <div class="wrap">
+        <p class="eyebrow"><span data-l="es">Cómo funciona</span><span data-l="en" lang="en">How it works</span></p>
+        <h2 id="pipeline-title" class="h2"><span data-l="es">De la tarjeta de memoria al JPEG, en tres pasos</span><span data-l="en" lang="en">From memory card to JPEG, in three steps</span></h2>
+        <ol class="mt-10 grid gap-4 lg:grid-cols-3">
+          <li class="card">
+            <p class="font-mono text-xs text-amber">01 · ingest</p>
+            <h3 class="mt-2 text-lg font-semibold"><span data-l="es">Ingesta CR3 / NEF / ARW</span><span data-l="en" lang="en">Ingest CR3 / NEF / ARW</span></h3>
+            <p class="mt-2 text-sm leading-relaxed text-mute" data-l="es">LibRaw (vía rawpy) decodifica el RAW propietario. Se extraen el mosaico, niveles de negro/blanco, balance de blancos, matrices de color y metadatos.</p>
+            <p class="mt-2 text-sm leading-relaxed text-mute" data-l="en" lang="en">LibRaw (via rawpy) decodes the proprietary RAW. The mosaic, black/white levels, white balance, color matrices and metadata are extracted.</p>
+          </li>
+          <li class="card">
+            <p class="font-mono text-xs text-amber">02 · .fraw</p>
+            <h3 class="mt-2 text-lg font-semibold"><span data-l="es">Archivo .fraw</span><span data-l="en" lang="en">.fraw file</span></h3>
+            <p class="mt-2 text-sm leading-relaxed text-mute" data-l="es">Se escriben HEAD, META, COLR, THMB, DATA y END con su CRC. El resultado se puede verificar en cualquier momento con <code>ctd-raw info</code>.</p>
+            <p class="mt-2 text-sm leading-relaxed text-mute" data-l="en" lang="en">HEAD, META, COLR, THMB, DATA and END are written with their CRCs. The result can be verified at any time with <code>ctd-raw info</code>.</p>
+          </li>
+          <li class="card">
+            <p class="font-mono text-xs text-amber">03 · develop</p>
+            <h3 class="mt-2 text-lg font-semibold"><span data-l="es">Revelado</span><span data-l="en" lang="en">Develop</span></h3>
+            <p class="mt-2 text-sm leading-relaxed text-mute" data-l="es">Negro/blanco → balance de blancos → demosaico (bilineal o AHD) → matriz de color → exposición y tono → curva sRGB. Los ajustes se guardan en <code>DEV&nbsp;</code>.</p>
+            <p class="mt-2 text-sm leading-relaxed text-mute" data-l="en" lang="en">Black/white → white balance → demosaic (bilinear or AHD) → color matrix → exposure and tone → sRGB curve. Settings are stored in <code>DEV&nbsp;</code>.</p>
+          </li>
+        </ol>
+        <div class="mt-8 grid gap-4 lg:grid-cols-2">
+          <div>
+            <h3 class="text-base font-semibold"><span data-l="es">Línea de comandos</span><span data-l="en" lang="en">Command line</span></h3>
+            <pre class="codeblock mt-3"><code><span class="text-mute"># 1. CR3 → .fraw</span>
+ctd-raw ingest IMG_0001.CR3 -o foto.fraw
+<span class="text-mute"># 2. inspect / verify CRC</span>
+ctd-raw info foto.fraw
+<span class="text-mute"># 3. develop → JPEG (+0.7 EV)</span>
+ctd-raw develop foto.fraw -o foto.jpg --ev +0.7
+<span class="text-mute"># GUI</span>
+ctd-studio</code></pre>
+          </div>
+          <div class="card">
+            <h3 class="text-base font-semibold"><span data-l="es">Pipeline de referencia (§5)</span><span data-l="en" lang="en">Reference pipeline (§5)</span></h3>
+            <ol class="mt-3 list-decimal space-y-1 pl-5 font-mono text-xs leading-6 text-mute-strong">
+              <li>x = (raw − black[cfa]) / (white − black[cfa]) → [0,1]</li>
+              <li>WB: x · mult[color]</li>
+              <li>demosaic: bilinear | ahd</li>
+              <li>rgb = rgb_cam · rgb</li>
+              <li>rgb · 2^exposure_ev → highlights / shadows / contrast / saturation</li>
+              <li>sRGB | power | linear → 8/16 bit</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== COMPARATIVA ===================== -->
+    <section id="comparativa" class="section border-t border-ink-700 bg-ink-900" aria-labelledby="comp-title">
+      <div class="wrap">
+        <p class="eyebrow"><span data-l="es">Comparativa honesta</span><span data-l="en" lang="en">An honest comparison</span></p>
+        <h2 id="comp-title" class="h2"><span data-l="es">.fraw frente a otros formatos</span><span data-l="en" lang="en">.fraw vs. other formats</span></h2>
+        <p class="lead" data-l="es">FabriRAW no pretende reemplazar a DNG. DNG también es una especificación pública, es mucho más maduro y lo lee casi todo el software fotográfico. FabriRAW apuesta por la simplicidad, la verificación por bloque y un revelado no destructivo definido en la propia especificación.</p>
+        <p class="lead" data-l="en" lang="en">FabriRAW does not aim to replace DNG. DNG is also a public specification, far more mature, and read by almost all photo software. FabriRAW bets on simplicity, per-chunk verification and non-destructive develop settings defined in the spec itself.</p>
+        <div class="tbl-wrap mt-8">
+          <table class="tbl min-w-[760px]">
+            <caption class="sr-only"><span data-l="es">Comparación de características entre .fraw, DNG, RAW propietarios, TIFF y JPEG</span><span data-l="en" lang="en">Feature comparison between .fraw, DNG, proprietary RAWs, TIFF and JPEG</span></caption>
+            <thead>
+              <tr>
+                <th scope="col"><span data-l="es">Característica</span><span data-l="en" lang="en">Feature</span></th>
+                <th scope="col" class="text-amber">.fraw</th>
+                <th scope="col">DNG</th>
+                <th scope="col">CR3 / NEF / ARW</th>
+                <th scope="col">TIFF</th>
+                <th scope="col">JPEG</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row" class="!bg-transparent !font-sans !font-medium"><span data-l="es">Especificación pública</span><span data-l="en" lang="en">Public specification</span></th>
+                <td><span data-l="es">Sí (MIT)</span><span data-l="en" lang="en">Yes (MIT)</span></td>
+                <td><span data-l="es">Sí (Adobe, libre de regalías)</span><span data-l="en" lang="en">Yes (Adobe, royalty-free)</span></td>
+                <td><span data-l="es">No; conocidos por ingeniería inversa</span><span data-l="en" lang="en">No; known via reverse engineering</span></td>
+                <td><span data-l="es">Sí (TIFF 6.0)</span><span data-l="en" lang="en">Yes (TIFF 6.0)</span></td>
+                <td><span data-l="es">Sí (ISO/IEC 10918)</span><span data-l="en" lang="en">Yes (ISO/IEC 10918)</span></td>
+              </tr>
+              <tr>
+                <th scope="row" class="!bg-transparent !font-sans !font-medium"><span data-l="es">Datos del sensor sin interpolar</span><span data-l="en" lang="en">Non-interpolated sensor data</span></th>
+                <td><span data-l="es">Sí (Bayer 2×2)</span><span data-l="en" lang="en">Yes (Bayer 2×2)</span></td>
+                <td><span data-l="es">Sí (CFA); también admite DNG lineal ya demosaicado</span><span data-l="en" lang="en">Yes (CFA); also allows already-demosaiced linear DNG</span></td>
+                <td><span data-l="es">Sí</span><span data-l="en" lang="en">Yes</span></td>
+                <td><span data-l="es">Normalmente no (RGB revelado)</span><span data-l="en" lang="en">Usually not (developed RGB)</span></td>
+                <td><span data-l="es">No (RGB 8 bits con pérdida)</span><span data-l="en" lang="en">No (lossy 8-bit RGB)</span></td>
+              </tr>
+              <tr>
+                <th scope="row" class="!bg-transparent !font-sans !font-medium"><span data-l="es">Integridad</span><span data-l="en" lang="en">Integrity</span></th>
+                <td><span data-l="es">CRC-32 en cada chunk</span><span data-l="en" lang="en">CRC-32 on every chunk</span></td>
+                <td><span data-l="es">Digest MD5 opcional de los datos de imagen</span><span data-l="en" lang="en">Optional MD5 digest of image data</span></td>
+                <td><span data-l="es">Varía y no está documentado</span><span data-l="en" lang="en">Varies, undocumented</span></td>
+                <td><span data-l="es">No en el estándar</span><span data-l="en" lang="en">Not in the standard</span></td>
+                <td>No</td>
+              </tr>
+              <tr>
+                <th scope="row" class="!bg-transparent !font-sans !font-medium"><span data-l="es">Edición no destructiva embebida</span><span data-l="en" lang="en">Embedded non-destructive edits</span></th>
+                <td><span data-l="es">Sí, chunk DEV definido en la spec</span><span data-l="en" lang="en">Yes, DEV chunk defined in the spec</span></td>
+                <td><span data-l="es">Posible vía XMP embebido; depende de cada programa</span><span data-l="en" lang="en">Possible via embedded XMP; app-specific</span></td>
+                <td><span data-l="es">No estándar (sidecars o software del fabricante)</span><span data-l="en" lang="en">Not standard (sidecars or vendor software)</span></td>
+                <td>No</td>
+                <td><span data-l="es">No (cada edición recomprime)</span><span data-l="en" lang="en">No (each edit recompresses)</span></td>
+              </tr>
+              <tr>
+                <th scope="row" class="!bg-transparent !font-sans !font-medium"><span data-l="es">Contenedor de ráfaga</span><span data-l="en" lang="en">Burst container</span></th>
+                <td><span data-l="es">Sí (.fset)</span><span data-l="en" lang="en">Yes (.fset)</span></td>
+                <td><span data-l="es">No (un archivo por imagen)</span><span data-l="en" lang="en">No (one file per image)</span></td>
+                <td><span data-l="es">Algunos modelos (p. ej., ráfaga RAW de Canon en un CR3)</span><span data-l="en" lang="en">Some models (e.g. Canon RAW burst in one CR3)</span></td>
+                <td><span data-l="es">Multipágina, sin semántica de ráfaga</span><span data-l="en" lang="en">Multi-page, no burst semantics</span></td>
+                <td>No</td>
+              </tr>
+              <tr>
+                <th scope="row" class="!bg-transparent !font-sans !font-medium"><span data-l="es">Compresión</span><span data-l="en" lang="en">Compression</span></th>
+                <td><span data-l="es">Ninguna o zlib, sin pérdida</span><span data-l="en" lang="en">None or zlib, lossless</span></td>
+                <td><span data-l="es">Sin pérdida y opciones con pérdida</span><span data-l="en" lang="en">Lossless plus lossy options</span></td>
+                <td><span data-l="es">Según el modo de la cámara</span><span data-l="en" lang="en">Depends on camera mode</span></td>
+                <td><span data-l="es">Sin pérdida (LZW/Deflate)</span><span data-l="en" lang="en">Lossless (LZW/Deflate)</span></td>
+                <td><span data-l="es">Con pérdida</span><span data-l="en" lang="en">Lossy</span></td>
+              </tr>
+              <tr>
+                <th scope="row" class="!bg-transparent !font-sans !font-medium"><span data-l="es">Soporte en software</span><span data-l="en" lang="en">Software support</span></th>
+                <td><span data-l="es">Nuevo: CTD Photo Studio y las librerías del repo</span><span data-l="en" lang="en">New: CTD Photo Studio and the repo's libraries</span></td>
+                <td><span data-l="es">Muy amplio</span><span data-l="en" lang="en">Very broad</span></td>
+                <td><span data-l="es">Amplio; cámaras nuevas tardan en llegar</span><span data-l="en" lang="en">Broad; new cameras lag behind</span></td>
+                <td><span data-l="es">Universal</span><span data-l="en" lang="en">Universal</span></td>
+                <td><span data-l="es">Universal</span><span data-l="en" lang="en">Universal</span></td>
+              </tr>
+              <tr>
+                <th scope="row" class="!bg-transparent !font-sans !font-medium"><span data-l="es">Licencia</span><span data-l="en" lang="en">License</span></th>
+                <td>MIT</td>
+                <td><span data-l="es">Spec gratuita con licencia de patentes de Adobe</span><span data-l="en" lang="en">Free spec with Adobe patent license</span></td>
+                <td><span data-l="es">Propietaria</span><span data-l="en" lang="en">Proprietary</span></td>
+                <td><span data-l="es">Spec pública (Adobe)</span><span data-l="en" lang="en">Public spec (Adobe)</span></td>
+                <td><span data-l="es">Estándar abierto</span><span data-l="en" lang="en">Open standard</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="mt-4 text-sm text-mute" data-l="es">¿Necesitas máxima compatibilidad hoy con Lightroom, Capture One u otros? DNG es la opción más práctica. Siempre conviene conservar los RAW originales.</p>
+        <p class="mt-4 text-sm text-mute" data-l="en" lang="en">Need maximum compatibility with Lightroom, Capture One and others today? DNG is the more practical choice. Always keep your original RAW files.</p>
+      </div>
+    </section>
+
+    <!-- ===================== ESPECIFICACIÓN ===================== -->
+    <section id="spec" class="section" aria-labelledby="spec-title">
+      <div class="wrap">
+        <p class="eyebrow"><span data-l="es">Especificación v1.0</span><span data-l="en" lang="en">Specification v1.0</span></p>
+        <h2 id="spec-title" class="h2"><span data-l="es">El formato, byte a byte</span><span data-l="en" lang="en">The format, byte by byte</span></h2>
+        <p class="lead" data-l="es">Todos los enteros y floats son <strong class="text-white">little-endian</strong>, sin padding. Los campos <code>reserved</code> se escriben en cero. El texto (META, DEV) es JSON UTF-8 sin BOM. Documento normativo completo: <a class="link" href="https://github.com/FabriCTD/fabriraw/blob/main/docs/SPEC.md">docs/SPEC.md</a>.</p>
+        <p class="lead" data-l="en" lang="en">All integers and floats are <strong class="text-white">little-endian</strong>, unpadded. <code>reserved</code> fields are written as zero. Text (META, DEV) is UTF-8 JSON without BOM. Full normative document: <a class="link" href="https://github.com/FabriCTD/fabriraw/blob/main/docs/SPEC.md">docs/SPEC.md</a>.</p>
+
+        <!-- Magic -->
+        <div class="mt-10 card">
+          <h3 class="text-lg font-semibold">Magic · 8 bytes</h3>
+          <div class="mt-4 grid grid-cols-4 gap-2 font-mono text-sm sm:grid-cols-8" role="list" aria-label="Magic bytes">
+            <div role="listitem" class="rounded-lg border border-amber/40 bg-amber/10 p-2 text-center"><div class="text-white">46</div><div class="text-xs text-mute">F</div></div>
+            <div role="listitem" class="rounded-lg border border-amber/40 bg-amber/10 p-2 text-center"><div class="text-white">52</div><div class="text-xs text-mute">R</div></div>
+            <div role="listitem" class="rounded-lg border border-amber/40 bg-amber/10 p-2 text-center"><div class="text-white">41</div><div class="text-xs text-mute">A</div></div>
+            <div role="listitem" class="rounded-lg border border-amber/40 bg-amber/10 p-2 text-center"><div class="text-white">57</div><div class="text-xs text-mute">W</div></div>
+            <div role="listitem" class="rounded-lg border border-ink-600 bg-ink-800 p-2 text-center"><div class="text-white">0D</div><div class="text-xs text-mute">\r</div></div>
+            <div role="listitem" class="rounded-lg border border-ink-600 bg-ink-800 p-2 text-center"><div class="text-white">0A</div><div class="text-xs text-mute">\n</div></div>
+            <div role="listitem" class="rounded-lg border border-ink-600 bg-ink-800 p-2 text-center"><div class="text-white">1A</div><div class="text-xs text-mute">\x1a</div></div>
+            <div role="listitem" class="rounded-lg border border-ink-600 bg-ink-800 p-2 text-center"><div class="text-white">0A</div><div class="text-xs text-mute">\n</div></div>
+          </div>
+          <p class="mt-4 text-sm text-mute" data-l="es">Como en PNG: <code>\r\n</code> detecta conversiones de fin de línea, <code>\x1a</code> detiene <code>type</code> en DOS y el <code>\n</code> final detecta la conversión inversa.</p>
+          <p class="mt-4 text-sm text-mute" data-l="en" lang="en">As in PNG: <code>\r\n</code> detects line-ending conversion, <code>\x1a</code> stops <code>type</code> on DOS, and the final <code>\n</code> detects the reverse conversion.</p>
+        </div>
+
+        <!-- Chunk framing -->
+        <div class="mt-6 card">
+          <h3 class="text-lg font-semibold"><span data-l="es">Framing de chunk · 20 bytes + payload</span><span data-l="en" lang="en">Chunk framing · 20 bytes + payload</span></h3>
+          <div class="mt-4 grid grid-cols-[1fr_1fr_1.6fr_2.4fr_1fr] gap-1 font-mono text-[11px] sm:text-xs">
+            <div class="chunk border-amber/50 bg-amber/10 text-white"><span>id</span><span class="text-mute">4 B</span></div>
+            <div class="chunk border-ink-600 bg-ink-800 text-white"><span>flags</span><span class="text-mute">u32</span></div>
+            <div class="chunk border-ink-600 bg-ink-800 text-white"><span>length</span><span class="text-mute">u64</span></div>
+            <div class="chunk border-signal/50 bg-signal/10 text-white"><span>payload</span><span class="text-mute">length B</span></div>
+            <div class="chunk border-amber/50 bg-amber/10 text-white"><span>crc32</span><span class="text-mute">u32</span></div>
+          </div>
+          <ul class="mt-4 space-y-2 text-sm text-mute" data-l="es">
+            <li>• Cabecera de 16 bytes (<code>id[4]</code>, <code>flags</code>, <code>length</code>) + payload + CRC de 4 bytes = 20 bytes de framing.</li>
+            <li>• <code>flags</code> bit0 = <code>CRITICAL</code>; el resto, reservado (0).</li>
+            <li>• El CRC-32 (IEEE 802.3, el de zlib) cubre <strong class="text-white">id[4] + payload</strong>, no flags ni length.</li>
+            <li>• CRC incorrecto ⇒ <code>CorruptChunk</code>. Desconocido y CRITICAL ⇒ <code>UnsupportedCriticalChunk</code>; sin CRITICAL se ignora. Chunk conocido duplicado ⇒ error.</li>
+          </ul>
+          <ul class="mt-4 space-y-2 text-sm text-mute" data-l="en" lang="en">
+            <li>• 16-byte header (<code>id[4]</code>, <code>flags</code>, <code>length</code>) + payload + 4-byte CRC = 20 bytes of framing.</li>
+            <li>• <code>flags</code> bit0 = <code>CRITICAL</code>; the rest reserved (0).</li>
+            <li>• The CRC-32 (IEEE 802.3, zlib's) covers <strong class="text-white">id[4] + payload</strong>, not flags or length.</li>
+            <li>• Bad CRC ⇒ <code>CorruptChunk</code>. Unknown and CRITICAL ⇒ <code>UnsupportedCriticalChunk</code>; without CRITICAL it is ignored. Duplicate known chunk ⇒ error.</li>
+          </ul>
+        </div>
+
+        <!-- File layout -->
+        <div class="mt-6 card">
+          <h3 class="text-lg font-semibold"><span data-l="es">Layout de un archivo .fraw</span><span data-l="en" lang="en">.fraw file layout</span></h3>
+          <ol class="mt-4 flex flex-col gap-1 lg:flex-row">
+            <li class="chunk border-amber/50 bg-amber/10 lg:w-[9%]"><span class="text-white">Magic</span><span class="text-mute">8 B</span></li>
+            <li class="chunk border-amber/50 bg-ink-800 lg:w-[12%]"><span class="text-white">HEAD</span><span class="text-mute">20 + 64</span><span class="text-amber">CRITICAL</span></li>
+            <li class="chunk border-ink-600 border-dashed bg-ink-800 lg:w-[10%]"><span class="text-white">META</span><span class="text-mute">20 + JSON</span><span class="text-mute">opc.</span></li>
+            <li class="chunk border-amber/50 bg-ink-800 lg:w-[12%]"><span class="text-white">COLR</span><span class="text-mute">20 + 112</span><span class="text-amber">CRITICAL</span></li>
+            <li class="chunk border-ink-600 border-dashed bg-ink-800 lg:w-[11%]"><span class="text-white">THMB</span><span class="text-mute">20 + 16 + N</span><span class="text-mute">opc.</span></li>
+            <li class="chunk border-signal/60 bg-signal/10 lg:flex-1"><span class="text-white">DATA</span><span class="text-mute">20 + w·h·2 <span data-l="es">(o zlib)</span><span data-l="en" lang="en">(or zlib)</span></span><span class="text-amber">CRITICAL</span></li>
+            <li class="chunk border-ink-600 border-dashed bg-ink-800 lg:w-[10%]"><span class="text-white">DEV&nbsp;</span><span class="text-mute">20 + JSON</span><span class="text-mute">opc.</span></li>
+            <li class="chunk border-amber/50 bg-ink-800 lg:w-[8%]"><span class="text-white">END&nbsp;</span><span class="text-mute">20 + 0</span><span class="text-amber">CRITICAL</span></li>
+          </ol>
+          <p class="mt-4 text-sm text-mute" data-l="es"><code>HEAD</code> siempre primero y <code>END&nbsp;</code> siempre último. META, COLR y THMB pueden aparecer en cualquier orden entre HEAD y DATA. <code>DEV&nbsp;</code> va después de DATA. Los IDs son exactamente 4 bytes ASCII: <code>"DEV "</code> y <code>"END "</code> llevan un espacio, y el de color es <code>COLR</code>.</p>
+          <p class="mt-4 text-sm text-mute" data-l="en" lang="en"><code>HEAD</code> always first and <code>END&nbsp;</code> always last. META, COLR and THMB may appear in any order between HEAD and DATA. <code>DEV&nbsp;</code> goes after DATA. IDs are exactly 4 ASCII bytes: <code>"DEV "</code> and <code>"END "</code> include a space, and the color chunk is <code>COLR</code>.</p>
+        </div>
+
+        <div class="mt-6 grid gap-6 lg:grid-cols-2">
+          <!-- HEAD -->
+          <div>
+            <h3 class="text-lg font-semibold">HEAD · 64 bytes</h3>
+            <div class="tbl-wrap mt-3">
+              <table class="tbl font-mono text-xs">
+                <caption class="sr-only"><span data-l="es">Offsets del payload HEAD</span><span data-l="en" lang="en">HEAD payload offsets</span></caption>
+                <thead><tr><th scope="col">Off</th><th scope="col"><span data-l="es">Tipo</span><span data-l="en" lang="en">Type</span></th><th scope="col"><span data-l="es">Campo</span><span data-l="en" lang="en">Field</span></th></tr></thead>
+                <tbody>
+                  <tr><td>0</td><td>u16</td><td>version_major <span class="text-mute">= 1</span></td></tr>
+                  <tr><td>2</td><td>u16</td><td>version_minor <span class="text-mute">= 0</span></td></tr>
+                  <tr><td>4</td><td>u32</td><td>width</td></tr>
+                  <tr><td>8</td><td>u32</td><td>height</td></tr>
+                  <tr><td>12</td><td>u16</td><td>bits_per_sample <span class="text-mute">= 16</span></td></tr>
+                  <tr><td>14</td><td>u16</td><td>effective_bits</td></tr>
+                  <tr><td>16</td><td>u8[4]</td><td>cfa_pattern <span class="text-mute">0=R 1=G 2=B</span></td></tr>
+                  <tr><td>20</td><td>u8</td><td>compression <span class="text-mute">0 | 1=zlib</span></td></tr>
+                  <tr><td>21</td><td>u8</td><td>orientation <span class="text-mute">EXIF 1–8</span></td></tr>
+                  <tr><td>22</td><td>u8</td><td>sample_layout <span class="text-mute">0 = Bayer 2×2</span></td></tr>
+                  <tr><td>23</td><td>u8</td><td>reserved0</td></tr>
+                  <tr><td>24</td><td>u32[4]</td><td>black_level</td></tr>
+                  <tr><td>40</td><td>u32</td><td>white_level</td></tr>
+                  <tr><td>44</td><td>u32</td><td>crop_left</td></tr>
+                  <tr><td>48</td><td>u32</td><td>crop_top</td></tr>
+                  <tr><td>52</td><td>u32</td><td>crop_width</td></tr>
+                  <tr><td>56</td><td>u32</td><td>crop_height</td></tr>
+                  <tr><td>60</td><td>u32</td><td>reserved1</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <!-- COLR -->
+          <div>
+            <h3 class="text-lg font-semibold">COLR · 112 bytes</h3>
+            <div class="tbl-wrap mt-3">
+              <table class="tbl font-mono text-xs">
+                <caption class="sr-only"><span data-l="es">Offsets del payload COLR</span><span data-l="en" lang="en">COLR payload offsets</span></caption>
+                <thead><tr><th scope="col">Off</th><th scope="col"><span data-l="es">Tipo</span><span data-l="en" lang="en">Type</span></th><th scope="col"><span data-l="es">Campo</span><span data-l="en" lang="en">Field</span></th></tr></thead>
+                <tbody>
+                  <tr><td>0</td><td>f32[4]</td><td>as_shot_wb <span class="text-mute">[R, G, B, G2]</span></td></tr>
+                  <tr><td>16</td><td>f32[4]</td><td>daylight_wb</td></tr>
+                  <tr><td>32</td><td>f32[9]</td><td>rgb_cam <span class="text-mute">cam → sRGB D65</span></td></tr>
+                  <tr><td>68</td><td>f32[9]</td><td>cam_xyz <span class="text-mute">XYZ → cam</span></td></tr>
+                  <tr><td>104</td><td>u32</td><td>illuminant <span class="text-mute">21 = D65</span></td></tr>
+                  <tr><td>108</td><td>u32</td><td>flags <span class="text-mute">bit0 rgb_cam, bit1 cam_xyz</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h3 class="mt-6 text-lg font-semibold">THMB · 16 + N bytes</h3>
+            <div class="tbl-wrap mt-3">
+              <table class="tbl font-mono text-xs">
+                <caption class="sr-only"><span data-l="es">Offsets del payload THMB</span><span data-l="en" lang="en">THMB payload offsets</span></caption>
+                <thead><tr><th scope="col">Off</th><th scope="col"><span data-l="es">Tipo</span><span data-l="en" lang="en">Type</span></th><th scope="col"><span data-l="es">Campo</span><span data-l="en" lang="en">Field</span></th></tr></thead>
+                <tbody>
+                  <tr><td>0</td><td>u8</td><td>format <span class="text-mute">0 = JPEG, 1 = RGB8</span></td></tr>
+                  <tr><td>1</td><td>u8[3]</td><td>reserved</td></tr>
+                  <tr><td>4</td><td>u32</td><td>width</td></tr>
+                  <tr><td>8</td><td>u32</td><td>height</td></tr>
+                  <tr><td>12</td><td>u32</td><td>data_length <span class="text-mute">= N</span></td></tr>
+                  <tr><td>16</td><td>u8[N]</td><td><span data-l="es">datos</span><span data-l="en" lang="en">data</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-6 grid gap-6 lg:grid-cols-2">
+          <div class="card">
+            <h3 class="text-lg font-semibold"><span data-l="es">Ráfaga .fset</span><span data-l="en" lang="en">.fset burst</span></h3>
+            <pre class="codeblock mt-3"><code>Magic: 46 53 45 54 0D 0A 1A 0A   "FSET\r\n\x1a\n"
+SETH  (CRITICAL) JSON {"version":1,"frame_count":N,…}
+FRAM  (CRITICAL) × N  → .fraw completo / full .fraw
+END   (CRITICAL) length 0</code></pre>
+            <p class="mt-3 text-sm text-mute" data-l="es">Mismo framing y CRC que .fraw. <code>frame_count</code> debe coincidir con la cantidad de chunks FRAM.</p>
+            <p class="mt-3 text-sm text-mute" data-l="en" lang="en">Same framing and CRC as .fraw. <code>frame_count</code> must match the number of FRAM chunks.</p>
+          </div>
+          <div class="card">
+            <h3 class="text-lg font-semibold"><span data-l="es">Errores normativos</span><span data-l="en" lang="en">Normative errors</span></h3>
+            <ul class="mt-3 flex flex-wrap gap-2">
+              <li class="pill">BadMagic</li><li class="pill">Truncated</li><li class="pill">CorruptChunk</li><li class="pill">UnsupportedVersion</li><li class="pill">UnsupportedCriticalChunk</li><li class="pill">MissingChunk</li><li class="pill">DuplicateChunk</li><li class="pill">BadOrder</li><li class="pill">InvalidHeader</li><li class="pill">SizeMismatch</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== DESCARGAS ===================== -->
+    <section id="descargas" class="section border-t border-ink-700 bg-ink-900" aria-labelledby="dl-title">
+      <div class="wrap">
+        <p class="eyebrow"><span data-l="es">Descargas</span><span data-l="en" lang="en">Downloads</span></p>
+        <h2 id="dl-title" class="h2"><span data-l="es">Gratis, sin cuentas ni instaladores raros</span><span data-l="en" lang="en">Free, no accounts, no weird installers</span></h2>
+        <div class="mt-10 grid gap-4 lg:grid-cols-3">
+          <div class="card flex flex-col">
+            <h3 class="text-lg font-semibold">Windows · Portable</h3>
+            <p class="mt-2 flex-1 text-sm text-mute" data-l="es">ZIP de 64 bits: descomprimir y ejecutar. Incluye la GUI <code>ctd-studio</code> y la CLI <code>ctd-raw</code>.</p>
+            <p class="mt-2 flex-1 text-sm text-mute" data-l="en" lang="en">64-bit ZIP: unzip and run. Includes the <code>ctd-studio</code> GUI and the <code>ctd-raw</code> CLI.</p>
+            <a class="btn-primary mt-5" href="https://github.com/FabriCTD/fabriraw/releases/latest/download/CTD-Photo-Studio-Portable-win64.zip">CTD-Photo-Studio-Portable-win64.zip</a>
+          </div>
+          <div class="card flex flex-col">
+            <h3 class="text-lg font-semibold"><span data-l="es">Todas las versiones</span><span data-l="en" lang="en">All releases</span></h3>
+            <p class="mt-2 flex-1 text-sm text-mute" data-l="es">Notas de cada versión, binarios anteriores y sumas de verificación en GitHub Releases.</p>
+            <p class="mt-2 flex-1 text-sm text-mute" data-l="en" lang="en">Release notes, previous binaries and checksums on GitHub Releases.</p>
+            <a class="btn-ghost mt-5" href="https://github.com/FabriCTD/fabriraw/releases">GitHub Releases</a>
+          </div>
+          <div class="card flex flex-col">
+            <h3 class="text-lg font-semibold"><span data-l="es">Código fuente</span><span data-l="en" lang="en">Source code</span></h3>
+            <p class="mt-2 flex-1 text-sm text-mute" data-l="es">Formato, librerías, tests y esta web, bajo licencia MIT.</p>
+            <p class="mt-2 flex-1 text-sm text-mute" data-l="en" lang="en">Format, libraries, tests and this website, MIT-licensed.</p>
+            <a class="btn-ghost mt-5" href="https://github.com/FabriCTD/fabriraw">FabriCTD/fabriraw</a>
+          </div>
+        </div>
+        <div class="mt-6">
+          <h3 class="text-base font-semibold"><span data-l="es">Instalar con pip (Python)</span><span data-l="en" lang="en">Install with pip (Python)</span></h3>
+          <pre class="codeblock mt-3"><code>pip install "fabriraw[gui,ingest] @ git+https://github.com/FabriCTD/fabriraw#subdirectory=python"</code></pre>
+          <p class="mt-3 text-sm text-mute" data-l="es">Si el enlace de descarga todavía no funciona, es porque aún no se publicó la primera versión: revisa <a class="link" href="https://github.com/FabriCTD/fabriraw/releases">Releases</a> o instala desde el código.</p>
+          <p class="mt-3 text-sm text-mute" data-l="en" lang="en">If the download link does not work yet, the first release has not been published: check <a class="link" href="https://github.com/FabriCTD/fabriraw/releases">Releases</a> or install from source.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== HECHO CON CLAUDE ===================== -->
+    <section id="claude" class="section" aria-labelledby="claude-title">
+      <div class="wrap">
+        <div class="rounded-3xl border border-amber/30 bg-gradient-to-br from-amber/10 via-ink-850 to-ink-900 p-6 sm:p-10">
+          <p class="eyebrow"><span data-l="es">Hecho con Claude</span><span data-l="en" lang="en">Made with Claude</span></p>
+          <h2 id="claude-title" class="h2"><span data-l="es">Un prompt. Un formato completo.</span><span data-l="en" lang="en">One prompt. A complete format.</span></h2>
+          <div data-l="es">
+            <p class="lead">Todo este proyecto —el formato FabriRAW y su especificación, el código, los tests, esta web y la documentación— fue construido por <strong class="text-white">Claude</strong>, la IA de Anthropic, a partir de <strong class="text-white">un único prompt inicial</strong> escrito por FabriCTD.</p>
+            <p class="lead">El objetivo es mostrar a fotógrafos y fotógrafas lo que Claude puede construir: no una demo, sino una herramienta real, abierta y verificable que se puede descargar, auditar y mejorar.</p>
+          </div>
+          <div data-l="en" lang="en">
+            <p class="lead">This entire project —the FabriRAW format and its specification, the code, the tests, this website and the docs— was built by <strong class="text-white">Claude</strong>, Anthropic's AI, from <strong class="text-white">a single initial prompt</strong> written by FabriCTD.</p>
+            <p class="lead">The goal is to show photographers what Claude can build: not a demo, but a real, open and verifiable tool you can download, audit and improve.</p>
+          </div>
+          <div class="mt-8 flex flex-wrap gap-3">
+            <a class="btn-primary" href="https://claude.com/claude-code"><span data-l="es">Conocer Claude Code</span><span data-l="en" lang="en">Discover Claude Code</span></a>
+            <a class="btn-ghost" href="https://github.com/FabriCTD/fabriraw"><span data-l="es">Ver el resultado en GitHub</span><span data-l="en" lang="en">See the result on GitHub</span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== FAQ ===================== -->
+    <section id="faq" class="section border-t border-ink-700 bg-ink-900" aria-labelledby="faq-title">
+      <div class="wrap max-w-3xl">
+        <p class="eyebrow">FAQ</p>
+        <h2 id="faq-title" class="h2"><span data-l="es">Preguntas frecuentes</span><span data-l="en" lang="en">Frequently asked questions</span></h2>
+        <div class="mt-8 space-y-3">
+          <details class="card p-0">
+            <summary class="cursor-pointer list-none p-5 font-semibold text-white [&::-webkit-details-marker]:hidden"><span data-l="es">¿Tengo que borrar mis RAW originales?</span><span data-l="en" lang="en">Do I have to delete my original RAWs?</span></summary>
+            <div class="px-5 pb-5 text-sm leading-relaxed text-mute">
+              <p data-l="es">No, y no lo recomendamos. Conserva siempre los CR3/NEF/ARW originales y una copia de seguridad. El software se ofrece «tal cual», sin garantías.</p>
+              <p data-l="en" lang="en">No, and we don't recommend it. Always keep the original CR3/NEF/ARW files and a backup. The software is provided "as is", without warranty.</p>
+            </div>
+          </details>
+          <details class="card p-0">
+            <summary class="cursor-pointer list-none p-5 font-semibold text-white [&::-webkit-details-marker]:hidden"><span data-l="es">¿Se pierde calidad al convertir?</span><span data-l="en" lang="en">Is quality lost when converting?</span></summary>
+            <div class="px-5 pb-5 text-sm leading-relaxed text-mute">
+              <p data-l="es">Las muestras del sensor se guardan sin pérdida y sin interpolar. META conserva los metadatos principales (cámara, lente, exposición, fecha); los bloques propietarios del fabricante (<em>maker notes</em>) no forman parte del formato.</p>
+              <p data-l="en" lang="en">Sensor samples are stored losslessly and non-interpolated. META keeps the main metadata (camera, lens, exposure, date); vendor-proprietary blocks (<em>maker notes</em>) are not part of the format.</p>
+            </div>
+          </details>
+          <details class="card p-0">
+            <summary class="cursor-pointer list-none p-5 font-semibold text-white [&::-webkit-details-marker]:hidden"><span data-l="es">¿Qué cámaras son compatibles?</span><span data-l="en" lang="en">Which cameras are supported?</span></summary>
+            <div class="px-5 pb-5 text-sm leading-relaxed text-mute">
+              <p data-l="es">La ingesta usa LibRaw (vía rawpy), así que en principio sirve cualquier RAW con sensor Bayer que LibRaw pueda leer, incluidos CR3, NEF y ARW. La v1 sólo define el mosaico Bayer 2×2: sensores X-Trans o Foveon no están soportados.</p>
+              <p data-l="en" lang="en">Ingest uses LibRaw (via rawpy), so in principle any Bayer-sensor RAW that LibRaw can read works, including CR3, NEF and ARW. v1 only defines the 2×2 Bayer mosaic: X-Trans or Foveon sensors are not supported.</p>
+            </div>
+          </details>
+          <details class="card p-0">
+            <summary class="cursor-pointer list-none p-5 font-semibold text-white [&::-webkit-details-marker]:hidden"><span data-l="es">¿Por qué no usar simplemente DNG?</span><span data-l="en" lang="en">Why not just use DNG?</span></summary>
+            <div class="px-5 pb-5 text-sm leading-relaxed text-mute">
+              <p data-l="es">DNG es una gran opción y tiene soporte universal. FabriRAW explora otra cosa: una especificación mínima que cabe en una página, CRC en cada bloque y un revelado no destructivo definido en el propio formato. Ambos pueden convivir.</p>
+              <p data-l="en" lang="en">DNG is a great choice with universal support. FabriRAW explores something else: a minimal one-page spec, a CRC on every chunk and non-destructive develop settings defined in the format itself. Both can coexist.</p>
+            </div>
+          </details>
+          <details class="card p-0">
+            <summary class="cursor-pointer list-none p-5 font-semibold text-white [&::-webkit-details-marker]:hidden"><span data-l="es">¿Es gratis? ¿Envía mis fotos a algún lado?</span><span data-l="en" lang="en">Is it free? Does it send my photos anywhere?</span></summary>
+            <div class="px-5 pb-5 text-sm leading-relaxed text-mute">
+              <p data-l="es">Es gratis y de código abierto (MIT). El software funciona sin conexión y no envía datos ni fotos. Esta web no usa cookies ni analítica.</p>
+              <p data-l="en" lang="en">It is free and open source (MIT). The software works offline and sends no data or photos. This website uses no cookies or analytics.</p>
+            </div>
+          </details>
+          <details class="card p-0">
+            <summary class="cursor-pointer list-none p-5 font-semibold text-white [&::-webkit-details-marker]:hidden"><span data-l="es">¿Funciona en macOS o Linux?</span><span data-l="en" lang="en">Does it work on macOS or Linux?</span></summary>
+            <div class="px-5 pb-5 text-sm leading-relaxed text-mute">
+              <p data-l="es">El paquete portable es para Windows de 64 bits. La instalación con pip está pensada para ser multiplataforma, pero la versión empaquetada y probada es la de Windows.</p>
+              <p data-l="en" lang="en">The portable package is for 64-bit Windows. The pip install is meant to be cross-platform, but the packaged and tested build is the Windows one.</p>
+            </div>
+          </details>
+          <details class="card p-0">
+            <summary class="cursor-pointer list-none p-5 font-semibold text-white [&::-webkit-details-marker]:hidden"><span data-l="es">¿Dónde reporto errores o pido ayuda?</span><span data-l="en" lang="en">Where do I report bugs or get help?</span></summary>
+            <div class="px-5 pb-5 text-sm leading-relaxed text-mute">
+              <p data-l="es">En <a class="link" href="https://github.com/FabriCTD/fabriraw/issues">GitHub Issues</a> o por Discord al usuario <code>fabri.ctd</code>.</p>
+              <p data-l="en" lang="en">On <a class="link" href="https://github.com/FabriCTD/fabriraw/issues">GitHub Issues</a> or on Discord, user <code>fabri.ctd</code>.</p>
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer class="border-t border-ink-700 bg-ink-950">
+    <div class="wrap grid gap-10 py-12 text-sm md:grid-cols-[1.4fr_1fr_1fr]">
+      <div>
+        <p class="flex items-center gap-2 font-display text-base font-bold text-white"><img src="/assets/favicon.svg" alt="" width="24" height="24"> FabriRAW · CTD Photo Studio</p>
+        <p class="mt-3 max-w-md leading-relaxed text-mute" data-l="es">Proyecto de <a class="link" href="https://fabrictd.com">FabriCTD</a>, construido íntegramente por <a class="link" href="https://claude.com/claude-code">Claude (Anthropic)</a> a partir de un único prompt inicial: formato, código, tests, web y documentación.</p>
+        <p class="mt-3 max-w-md leading-relaxed text-mute" data-l="en" lang="en">A <a class="link" href="https://fabrictd.com">FabriCTD</a> project, built entirely by <a class="link" href="https://claude.com/claude-code">Claude (Anthropic)</a> from a single initial prompt: format, code, tests, website and docs.</p>
+        <p class="mt-3 text-mute">© 2026 FabriCTD · MIT</p>
+      </div>
+      <nav aria-label="Legal">
+        <p class="font-semibold text-white">Legal</p>
+        <ul class="mt-3 space-y-2">
+          <li><a class="text-mute no-underline hover:text-white" href="/legal/terminos.html"><span data-l="es">Términos de uso</span><span data-l="en" lang="en">Terms of use</span></a></li>
+          <li><a class="text-mute no-underline hover:text-white" href="/legal/privacidad.html"><span data-l="es">Privacidad</span><span data-l="en" lang="en">Privacy</span></a></li>
+          <li><a class="text-mute no-underline hover:text-white" href="/legal/licencia.html"><span data-l="es">Licencia y terceros</span><span data-l="en" lang="en">License &amp; third parties</span></a></li>
+          <li><a class="text-mute no-underline hover:text-white" href="/legal/marcas.html"><span data-l="es">Marcas</span><span data-l="en" lang="en">Trademarks</span></a></li>
+        </ul>
+      </nav>
+      <nav aria-label="Enlaces">
+        <p class="font-semibold text-white"><span data-l="es">Enlaces</span><span data-l="en" lang="en">Links</span></p>
+        <ul class="mt-3 space-y-2">
+          <li><a class="text-mute no-underline hover:text-white" href="https://github.com/FabriCTD/fabriraw">GitHub · fabriraw</a></li>
+          <li><a class="text-mute no-underline hover:text-white" href="https://github.com/FabriCTD">GitHub · FabriCTD</a></li>
+          <li><a class="text-mute no-underline hover:text-white" href="https://fabrictd.com">fabrictd.com</a></li>
+          <li class="text-mute">Discord: <code class="text-mute-strong">fabri.ctd</code></li>
+        </ul>
+      </nav>
+    </div>
+  </footer>
+</body>
+</html>
