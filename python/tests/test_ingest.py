@@ -506,14 +506,17 @@ class TestMakeModel:
 # API surface
 # ---------------------------------------------------------------------------
 def test_supported_extensions():
-    assert SUPPORTED_EXTENSIONS == {".cr3", ".cr2", ".nef", ".nrw", ".arw", ".sr2", ".dng", ".raf", ".orf", ".rw2", ".pef"}
+    # Sólo para filtros de diálogos: la aceptación real es por contenido (fraw.sniff).
+    assert {".cr3", ".cr2", ".nef", ".nrw", ".arw", ".sr2", ".dng", ".raf", ".orf", ".rw2", ".pef"} <= SUPPORTED_EXTENSIONS
 
 
-def test_rejects_extension(tmp_path):
-    p = tmp_path / "photo.jpg"
-    p.write_bytes(b"x")
-    with pytest.raises(ValueError, match="unsupported RAW extension"):
-        ing.ingest(p)
+def test_rejects_processed_image_by_content(tmp_path):
+    # Un JPEG se rechaza por su contenido, se llame como se llame.
+    for name in ("photo.jpg", "photo.NEF"):
+        p = tmp_path / name
+        p.write_bytes(b"\xff\xd8\xff\xe0" + b"\0" * 64)
+        with pytest.raises(ing.NotRawError, match="JPEG"):
+            ing.ingest(p)
 
 
 def test_missing_file(tmp_path):

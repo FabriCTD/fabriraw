@@ -48,9 +48,12 @@ import numpy as np
 
 from .format import Color, FrawFile, Head, Thumbnail
 from .fset import FrawSet
+from .sniff import NotRawError, sniff
 
 __all__ = [
     "SUPPORTED_EXTENSIONS",
+    "NotRawError",
+    "is_importable",
     "SOFTWARE",
     "ingest",
     "ingest_to_file",
@@ -67,9 +70,20 @@ __all__ = [
     "even_geometry",
 ]
 
+#: Extensiones RAW habituales. Sólo se usan para filtros de diálogos y listados:
+#: la aceptación real se decide por el contenido del archivo (ver fraw.sniff).
 SUPPORTED_EXTENSIONS: frozenset[str] = frozenset(
-    {".cr3", ".cr2", ".nef", ".nrw", ".arw", ".sr2", ".dng", ".raf", ".orf", ".rw2", ".pef"}
+    {
+        ".cr3", ".cr2", ".crw", ".nef", ".nrw", ".arw", ".sr2", ".srf", ".dng", ".raf",
+        ".orf", ".rw2", ".rwl", ".pef", ".srw", ".mrw", ".3fr", ".fff", ".iiq", ".erf",
+        ".kdc", ".dcr", ".mos", ".x3f",
+    }
 )
+
+
+def is_importable(path: str | os.PathLike) -> bool:
+    """True si el contenido de ``path`` parece un RAW (no garantiza que LibRaw lo acepte)."""
+    return sniff(path).may_be_raw
 SOFTWARE = "CTD Photo Studio 0.1.0"
 ILLUMINANT_D65 = 21
 COLR_FLAG_RGB_CAM = 1
@@ -607,27 +621,63 @@ def from_rawpy(
 
 
 def _check_source(src_path: str | os.PathLike) -> str:
+    """Valida ``src_path`` por su CONTENIDO (la extensión no importa).
+
+    Rechaza con :class:`NotRawError` las imágenes ya procesadas (JPEG, PNG, HEIC,
+    TIFF común, DNG lineal…) y los archivos FabriRAW (que se abren, no se importan).
+    """
     path = os.fspath(src_path)
-    ext = os.path.splitext(path)[1].lower()
-    if ext not in SUPPORTED_EXTENSIONS:
-        exts = " ".join(sorted(e[1:].upper() for e in SUPPORTED_EXTENSIONS))
-        raise ValueError(f"unsupported RAW extension {ext or '(none)'!r}; supported: {exts}")
     if not os.path.isfile(path):
         raise FileNotFoundError(path)
+    det = sniff(path)
+    name = os.path.basename(path)
+    if det.is_fabriraw:
+        raise NotRawError(f"{name}: ya es un archivo {det.label}; abrilo directamente (no hace falta importarlo).")
+    if not det.may_be_raw:
+        raise NotRawError(f"{name}: {det.reason}")
     return path
+
+
+def _not_raw_from(name: str, exc: Exception) -> NotRawError:
+    msg = str(exc)
+    if "Unsupported file format" in msg or "not RAW" in msg:
+        return NotRawError(
+            f"{name}: no es un archivo RAW que LibRaw reconozca (puede ser una imagen ya procesada "
+            "o un formato no soportado)."
+        )
+    return NotRawError(f"{name}: no se pudo leer como RAW ({msg}).")
 
 
 def ingest(src_path: str | os.PathLike, *, thumbnail: bool = True, thumb_max: int | None = 512) -> FrawFile:
     """Read a camera RAW file and return the equivalent FrawFile (not written to disk).
 
-    Raises ValueError for unsupported extensions and non-Bayer sensors (X-Trans,
-    Foveon, 4-colour, ...), ImportError if rawpy is missing; LibRaw read errors
-    (``rawpy.LibRawError`` subclasses) propagate unchanged.
+    The file type is decided by its content, not its extension (a DNG saved as
+    ``.tiff`` works). Only files holding the original, non-interpolated 2x2 Bayer
+    mosaic are accepted; processed images (JPEG/PNG/HEIC/TIFF, linear "rgb" DNG,
+    Apple ProRAW), X-Trans and Foveon raise :class:`NotRawError` (a ValueError)
+    with a Spanish explanation. ImportError if rawpy is missing.
     """
+    if thumb_max is not None and thumb_max < 1:
+        raise ValueError("thumb_max must be >= 1 or None")
     path = _check_source(src_path)
+    name = os.path.basename(path)
     rawpy = _import_rawpy()
-    with rawpy.imread(path) as raw:
-        return from_rawpy(raw, path, thumbnail=thumbnail, thumb_max=thumb_max)
+    try:
+        raw_ctx = rawpy.imread(path)
+    except rawpy.LibRawError as exc:
+        raise _not_raw_from(name, exc) from None
+    with raw_ctx as raw:
+        try:
+            return from_rawpy(raw, path, thumbnail=thumbnail, thumb_max=thumb_max)
+        except NotRawError:
+            raise
+        except ValueError as exc:
+            raise NotRawError(
+                f"{name}: no contiene un mosaico Bayer 2x2 original sin interpolar ({exc}). "
+                "Los RAW ya interpolados (DNG \"rgb\"/lineal, Apple ProRAW), X-Trans y Foveon no son compatibles."
+            ) from None
+        except rawpy.LibRawError as exc:
+            raise _not_raw_from(name, exc) from None
 
 
 def ingest_to_file(

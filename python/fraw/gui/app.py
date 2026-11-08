@@ -92,6 +92,19 @@ GAMMA_MODES = [("srgb", "sRGB"), ("power", "Potencia"), ("linear", "Lineal")]
 DEMOSAICS = [("ahd", "AHD (calidad)"), ("bilinear", "Bilineal (rápido)")]
 
 
+#: Extensiones de imágenes procesadas que ni se intentan detectar al listar carpetas.
+_SKIP_LIST_EXTS = frozenset({
+    ".jpg", ".jpeg", ".png", ".heic", ".heif", ".avif", ".webp", ".gif", ".bmp", ".psd",
+    ".xmp", ".pp3", ".json", ".txt", ".pdf", ".mp4", ".mov", ".avi", ".thm", ".ini", ".db",
+})
+
+
+def _sniff(path: str | os.PathLike):
+    from ..sniff import sniff  # noqa: PLC0415
+
+    return sniff(path)
+
+
 def _camera_exts() -> frozenset[str]:
     from ..ingest import SUPPORTED_EXTENSIONS  # noqa: PLC0415 (no rawpy import here)
 
@@ -659,9 +672,12 @@ class MainWindow(QMainWindow):
 
     def open_path(self, path: str | os.PathLike, *, sync: bool = False) -> None:
         p = Path(path)
-        ext = p.suffix.lower()
-        if ext in _camera_exts():
+        det = _sniff(p)  # por contenido, no por extensión
+        if det.may_be_raw:
             self.import_files([str(p)], sync=sync)
+            return
+        if not det.is_fabriraw:
+            QMessageBox.warning(self, APP_NAME, f"No se puede abrir {p.name}:\n{det.reason}")
             return
         if not self.confirm_discard():
             return
@@ -797,14 +813,31 @@ class MainWindow(QMainWindow):
             self._thumb_loader.cancel()
             self._thumb_loader.wait(2000)
         self.library.clear()
-        exts = set(FRAW_EXTS) | set(_camera_exts())
+        known = set(FRAW_EXTS) | set(_camera_exts())
+        files = []
+        fraw_kind: dict[Path, bool] = {}
         try:
-            files = sorted(p for p in folder.iterdir() if p.is_file() and p.suffix.lower() in exts)
+            entries = sorted(p for p in folder.iterdir() if p.is_file())
         except OSError:
-            files = []
+            entries = []
+        for p in entries:
+            ext = p.suffix.lower()
+            if ext in _SKIP_LIST_EXTS:
+                continue
+            if ext in FRAW_EXTS:
+                fraw_kind[p] = True
+                files.append(p)
+            elif ext in known:
+                fraw_kind[p] = False
+                files.append(p)
+            else:  # extensión rara o renombrada (.tiff, .bin…): se mira el contenido
+                d = _sniff(p)
+                if d.is_fabriraw or d.may_be_raw:
+                    fraw_kind[p] = d.is_fabriraw
+                    files.append(p)
         self._library_items: dict[str, QListWidgetItem] = {}
         for p in files:
-            raw = p.suffix.lower() not in FRAW_EXTS
+            raw = not fraw_kind[p]
             it = QListWidgetItem(p.name + ("\nRAW · importar" if raw else ""))
             it.setData(Qt.ItemDataRole.UserRole, str(p))
             it.setToolTip(str(p))
@@ -864,7 +897,7 @@ class MainWindow(QMainWindow):
 
     def import_dialog(self) -> None:
         cams = " ".join(f"*{e}" for e in sorted(_camera_exts()))
-        fns, _ = QFileDialog.getOpenFileNames(self, "Importar RAW de cámara", self._last_dir(), f"RAW de cámara ({cams})")
+        fns, _ = QFileDialog.getOpenFileNames(self, "Importar RAW de cámara", self._last_dir(), f"RAW de cámara ({cams});;Todos los archivos (*.*)")
         if fns:
             self.import_files(fns)
 
@@ -888,8 +921,12 @@ class MainWindow(QMainWindow):
             name = Path(src).with_suffix(".fraw").name
             return os.path.join(outdir, name) if outdir else str(Path(src).with_suffix(".fraw"))
 
+        skipped: list[str] = []
+
         def work(report, cancelled):
             from ..ingest import ingest_to_file  # noqa: PLC0415
+
+            from ..sniff import NotRawError  # noqa: PLC0415
 
             done = []
             for i, s in enumerate(srcs):
@@ -897,7 +934,13 @@ class MainWindow(QMainWindow):
                     break
                 report(i, f"Convirtiendo {Path(s).name} ({i + 1}/{len(srcs)})…")
                 d = dst_for(s)
-                ingest_to_file(s, d)
+                try:
+                    ingest_to_file(s, d)
+                except NotRawError as e:
+                    if len(srcs) == 1:
+                        raise
+                    skipped.append(str(e))
+                    continue
                 done.append(d)
             report(len(srcs), "Listo")
             return done
@@ -905,6 +948,13 @@ class MainWindow(QMainWindow):
         prog = None if sync else self._busy("Importando…", len(srcs))
 
         def finished(done: list[str]) -> None:
+            self.last_import_skipped = list(skipped)
+            if skipped and not sync:
+                shown = "\n\n".join(skipped[:8]) + ("\n\n…" if len(skipped) > 8 else "")
+                QMessageBox.warning(
+                    self, APP_NAME,
+                    f"Se omitieron {len(skipped)} archivo(s) que no son RAW con datos de sensor:\n\n{shown}",
+                )
             if not done:
                 return
             self.statusBar().showMessage(f"Importados {len(done)} archivo(s)")
@@ -1232,8 +1282,9 @@ class MainWindow(QMainWindow):
 
     def dropEvent(self, e):  # noqa: N802
         files = [u.toLocalFile() for u in e.mimeData().urls() if u.isLocalFile()]
-        raws = [f for f in files if Path(f).suffix.lower() in _camera_exts()]
-        fr = [f for f in files if Path(f).suffix.lower() in FRAW_EXTS]
+        kinds = {f: _sniff(f) for f in files if os.path.isfile(f)}
+        raws = [f for f, d in kinds.items() if d.may_be_raw]
+        fr = [f for f, d in kinds.items() if d.is_fabriraw]
         if fr:
             self.open_path(fr[0])
         elif raws:

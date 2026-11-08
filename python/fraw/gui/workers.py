@@ -137,13 +137,18 @@ def _decode_thumb(fmt: int | None, size: tuple[int, int], data: bytes) -> QImage
     return None
 
 
+FRAW_MAGIC = b"FRAW\r\n\x1a\n"
+FSET_MAGIC = b"FSET\r\n\x1a\n"
+
+
 def load_thumbnail(path: str, max_side: int = 160) -> tuple[QImage | None, dict]:
     """(thumbnail QImage, info) for a .fraw/.frw/.fset (THMB) or a camera RAW (embedded preview)."""
-    ext = os.path.splitext(path)[1].lower()
+    with open(path, "rb") as fh:
+        magic = fh.read(8)
     info: dict = {}
     img: QImage | None = None
     orientation = 1
-    if ext in (".fraw", ".frw", ".fset"):
+    if magic in (FRAW_MAGIC, FSET_MAGIC):  # por contenido, no por extensión
         pk = peek_file(path)
         img = _decode_thumb(pk.thumb_format, pk.thumb_size, pk.thumb_data)
         orientation = pk.orientation

@@ -72,24 +72,26 @@ def load_any(path: str | os.PathLike, frame: int = 0) -> tuple[Any, str]:
 
     ``kind`` is ``"fraw"``, ``"fset"`` or ``"raw"``.
     """
-    from .format import MAGIC, SET_MAGIC, FrawFile
+    from .format import FrawFile
     from .fset import FrawSet
+    from .sniff import sniff
 
     p = os.fspath(path)
-    ext = os.path.splitext(p)[1].lower()
-    if ext in _camera_exts():
-        from .ingest import ingest
-
-        return ingest(p), "raw"
-    m = _magic(p)
-    if m == SET_MAGIC:
+    if not os.path.isfile(p):
+        raise CliError(f"no existe el archivo {p}")
+    det = sniff(p)  # se decide por el contenido, no por la extensión
+    if det.kind == "fset":
         s = FrawSet.read(p)
         if not 0 <= frame < len(s.frames):
             raise CliError(f"frame {frame} fuera de rango (el .fset tiene {len(s.frames)})")
         return s.frames[frame], "fset"
-    if m != MAGIC and ext not in FRAW_EXTS:
-        raise CliError(f"{p}: no es un archivo FabriRAW ni un RAW de cámara soportado")
-    return FrawFile.read(p), "fraw"
+    if det.kind == "fraw":
+        return FrawFile.read(p), "fraw"
+    if det.may_be_raw:
+        from .ingest import ingest
+
+        return ingest(p), "raw"
+    raise CliError(f"{os.path.basename(p)}: {det.reason}")
 
 
 def _fmt_shutter(s: Any) -> str:
@@ -193,7 +195,19 @@ def cmd_info(a: argparse.Namespace) -> int:
     from .format import MAGIC, SET_MAGIC, FrawFile
     from .fset import FrawSet
 
+    from .sniff import sniff
+
     path = a.file
+    if not os.path.isfile(path):
+        raise CliError(f"no existe el archivo {path}")
+    det = sniff(path)
+    if not det.is_fabriraw:
+        if det.may_be_raw:
+            raise CliError(
+                f"{os.path.basename(path)} es un RAW de cámara ({det.label}), no un FabriRAW: "
+                f"convertilo con  ctd-raw ingest \"{path}\""
+            )
+        raise CliError(f"{os.path.basename(path)}: {det.reason}")
     with open(path, "rb") as fh:
         data = fh.read()
     size = len(data)
@@ -243,15 +257,28 @@ def cmd_ingest(a: argparse.Namespace) -> int:
         raise CliError("-o sólo sirve con un único archivo de entrada; usá --outdir para varios")
     if a.outdir:
         os.makedirs(a.outdir, exist_ok=True)
+    from .sniff import NotRawError
+
+    skipped = 0
     for src in srcs:
         if a.output:
             dst = a.output
         else:
             base = Path(src).with_suffix(".fraw").name
             dst = os.path.join(a.outdir, base) if a.outdir else os.fspath(Path(src).with_suffix(".fraw"))
-        f = ingest_to_file(src, dst, compress=not a.no_compress, thumbnail=not a.no_thumb)
+        try:
+            f = ingest_to_file(src, dst, compress=not a.no_compress, thumbnail=not a.no_thumb)
+        except NotRawError as e:
+            if len(srcs) == 1:
+                raise
+            _err(f"omitido: {e}")  # en lote se sigue con el resto
+            skipped += 1
+            continue
         cam = " ".join(str(f.meta.get(k, "")) for k in ("make", "model")).strip() or "cámara desconocida"
         _out(f"{src} -> {dst}  ({f.head.width}x{f.head.height}, {cam}, {os.path.getsize(dst)} bytes)")
+    if skipped:
+        _err(f"{skipped} de {len(srcs)} archivo(s) omitido(s) por no ser RAW con datos de sensor")
+        return 1
     return 0
 
 
