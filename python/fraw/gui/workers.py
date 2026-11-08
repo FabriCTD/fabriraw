@@ -52,7 +52,10 @@ class LatestWorker(QThread):
         with self._cond:
             self._stop = True
             self._cond.notify()
-        self.wait(5000)
+        # Wait until the current job finishes: destroying a running QThread aborts
+        # the process (and hangs headless Windows on the abort dialog).
+        while not self.wait(5000):
+            pass
 
     def run(self) -> None:  # noqa: D401 (Qt API)
         while True:

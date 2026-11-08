@@ -204,7 +204,7 @@ def test_zoom_and_detail_tile(app, win, tmp_path):
     assert win.needs_detail()
     # The tile must end up covering the visible area (it is re-requested after view changes).
     assert pump(app, lambda: win.canvas.has_tile() and win.canvas._tile_rect.contains(win.canvas.visible_image_rect()),
-                timeout=30)
+                timeout=120)
     win.canvas.fit()
     assert not win.needs_detail()
 

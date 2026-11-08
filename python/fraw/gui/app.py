@@ -961,7 +961,7 @@ class MainWindow(QMainWindow):
         self.settings.setValue("last_folder", str(folder))
         if self._thumb_loader is not None:
             self._thumb_loader.cancel()
-            self._thumb_loader.wait(2000)
+            self._thumb_loader.wait()
         self.library.clear()
         known = set(FRAW_EXTS) | set(_camera_exts())
         self._sniffed = 0
@@ -2194,12 +2194,12 @@ class MainWindow(QMainWindow):
     def shutdown(self) -> None:
         if self._thumb_loader is not None:
             self._thumb_loader.cancel()
-            self._thumb_loader.wait(3000)
+            self._thumb_loader.wait()
         for w in (self.render_worker, self.detail_worker, self.preset_worker):
             w.stop()
         for t in list(self._tasks):
             t.cancel()
-            t.wait(30000)
+            t.wait()
 
 
 # ---------------------------------------------------------------------------

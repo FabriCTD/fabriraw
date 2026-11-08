@@ -12,6 +12,7 @@ jobs:
   core:
     name: C++ core (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:
@@ -28,6 +29,7 @@ jobs:
   python:
     name: Python (${{ matrix.os }}, ${{ matrix.python }})
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:
