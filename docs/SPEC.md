@@ -159,11 +159,14 @@ Si `flags.bit0 == 0` el procesador usa identidad.
   "shadows": 0.0,               // [-1, +1]
   "gamma_mode": "srgb",         // "srgb" | "power" | "linear"
   "gamma": 2.2,                 // sólo para "power"
-  "demosaic": "ahd"             // "bilinear" | "ahd"
+  "demosaic": "ahd",            // "bilinear" | "ahd"
+  "wb_mode": "as_shot"          // v2 agrega "kelvin" (usa wb_kelvin / wb_kelvin_tint)
 }
 ```
 
 Valores fuera de rango se recortan al rango. Claves ausentes = valor por defecto de arriba.
+
+**DEV v2** (`"version": 2`) agrega ajustes profesionales — curvas de tonos (paramétrica y de puntos por canal), mezclador HSL de 8 bandas, gradación de color, enfoque y reducción de ruido, corrección de lente y aberración cromática, geometría (giro, enderezado, perspectiva, recorte), viñeta, grano, calibración y modo de altas luces — conservando las 12 claves de v1 con el mismo significado. El listado normativo completo (107 claves, rangos y defectos) está en [`DEV_PARAMS.md`](DEV_PARAMS.md). Un lector v1 ignora las claves nuevas; un lector v2 acepta un DEV v1. Los writers PUEDEN omitir las claves que tengan su valor por defecto.
 
 ## 5. Pipeline de revelado de referencia
 

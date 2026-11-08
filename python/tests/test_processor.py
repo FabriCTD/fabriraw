@@ -78,8 +78,7 @@ def flat(h: int, w: int, rgb) -> np.ndarray:
 def test_devparams_defaults() -> None:
     p = DevParams()
     d = p.to_dict()
-    assert d == {
-        "version": 1,
+    v1_keys = {
         "exposure_ev": 0.0,
         "wb_mode": "as_shot",
         "wb_custom": [2.0, 1.0, 1.5],
@@ -93,6 +92,10 @@ def test_devparams_defaults() -> None:
         "gamma": 2.2,
         "demosaic": "ahd",
     }
+    # DEV v2 conserva las 12 claves v1 con el mismo defecto (SPEC §4.6)
+    assert d["version"] == 2
+    assert {k: d[k] for k in v1_keys} == v1_keys
+    assert p.to_dict(full=False) == {"version": 2}
     assert DevParams.from_dict({}) == p
     assert DevParams.from_dict(None) == p
     assert DevParams.from_dict([1, 2]) == p  # type: ignore[arg-type]
@@ -144,7 +147,7 @@ def test_devparams_roundtrip() -> None:
                   saturation=1.4, highlights=-0.4, shadows=0.2, gamma_mode="power", gamma=1.8, demosaic="bilinear",
                   temperature_shift=0.1, tint_shift=-0.2)
     d = p.to_dict()
-    assert d["version"] == 1
+    assert d["version"] == 2
     assert DevParams.from_dict(d) == p
     import json
 
