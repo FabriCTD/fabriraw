@@ -49,6 +49,7 @@ import numpy as np
 from .format import Color, FrawFile, Head, Thumbnail
 from .fset import FrawSet
 from .sniff import NotRawError, sniff
+from . import __version__
 
 __all__ = [
     "SUPPORTED_EXTENSIONS",
@@ -84,7 +85,7 @@ SUPPORTED_EXTENSIONS: frozenset[str] = frozenset(
 def is_importable(path: str | os.PathLike) -> bool:
     """True si el contenido de ``path`` parece un RAW (no garantiza que LibRaw lo acepte)."""
     return sniff(path).may_be_raw
-SOFTWARE = "CTD Photo Studio 0.1.0"
+SOFTWARE = f"CTD Photo Studio {__version__}"
 ILLUMINANT_D65 = 21
 COLR_FLAG_RGB_CAM = 1
 COLR_FLAG_CAM_XYZ = 2

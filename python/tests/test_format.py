@@ -63,7 +63,7 @@ u32 = lambda v: struct.pack("<I", v)  # noqa: E731
 
 # ------------------------------------------------------------------ package / layout
 def test_package_exports():
-    assert fraw.__version__ == "0.1.0"
+    assert fraw.__version__ == "0.2.0"
     assert fraw.MAGIC == b"FRAW\r\n\x1a\n" == MAGIC
     assert SET_MAGIC == b"FSET\r\n\x1a\n"
     for name in ("FrawFile", "FrawSet", "Head", "Color", "Thumbnail", "FrawError", "ErrorCode", "update_dev"):

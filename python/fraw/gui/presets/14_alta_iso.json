@@ -1,0 +1,13 @@
+{
+  "fraw_preset": 1,
+  "name": "Alta sensibilidad (ruido)",
+  "group": "Corrección",
+  "settings": {
+    "nr_luminance": 0.35,
+    "nr_luminance_detail": 0.5,
+    "nr_color": 0.5,
+    "sharpen_amount": 0.25,
+    "sharpen_masking": 0.4,
+    "texture": -0.05
+  }
+}

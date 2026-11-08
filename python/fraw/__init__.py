@@ -11,7 +11,7 @@ from __future__ import annotations
 import importlib
 from typing import TYPE_CHECKING, Any
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 
 _EXPORTS = {
     "MAGIC": "format",

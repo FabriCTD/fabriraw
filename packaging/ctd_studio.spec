@@ -63,8 +63,8 @@ EXCLUDES = [f"PySide6.{m}" for m in QT_UNUSED] + [
     "tkinter", "_tkinter", "matplotlib", "IPython", "jupyter", "notebook", "pytest", "_pytest",
     "PyQt5", "PyQt6", "PySide2", "pandas", "sympy", "numba", "cv2", "imageio", "skimage",
     "scipy.stats", "scipy.optimize", "scipy.integrate", "scipy.interpolate", "scipy.signal", "scipy.io",
-    "scipy.spatial", "scipy.cluster", "scipy.odr", "scipy.datasets", "scipy.misc", "scipy.sparse.linalg",
-    "scipy.differentiate", "scipy.sparse", "scipy.fft", "scipy.fftpack",
+    "scipy.spatial", "scipy.cluster", "scipy.odr", "scipy.datasets", "scipy.misc",
+    "scipy.differentiate", "scipy.fft", "scipy.fftpack",  # scipy.sparse: lo usa fraw.pipeline (remuestreo)
     "PIL.ImageTk", "PIL.ImageQt",
     # pulled in only by optional code paths of dependencies (network, YAML, CFFI…)
     "ssl", "_ssl", "yaml", "cffi", "charset_normalizer", "requests", "urllib3", "certifi",
@@ -89,10 +89,11 @@ def _keep(entry) -> bool:
 
 
 HIDDEN = collect_submodules("fraw") + ["rawpy", "rawpy._rawpy", "PIL.Image", "PIL.JpegImagePlugin",
-                                       "PIL.PngImagePlugin", "PIL.TiffImagePlugin"]
+                                       "PIL.PngImagePlugin", "PIL.TiffImagePlugin", "PIL.ImageCms"]
 DATAS = [
     (str(PY / "fraw" / "gui" / "theme.qss"), "fraw/gui"),
     (str(PY / "fraw" / "gui" / "icon.png"), "fraw/gui"),
+    *[(str(f), "fraw/gui/presets") for f in sorted((PY / "fraw" / "gui" / "presets").glob("*.json"))],
     (str(ROOT / "THIRD_PARTY_NOTICES.md"), "."),
     (str(ROOT / "LICENSE"), "."),
 ]

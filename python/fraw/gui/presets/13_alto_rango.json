@@ -1,0 +1,14 @@
+{
+  "fraw_preset": 1,
+  "name": "Alto rango dinámico",
+  "group": "Color",
+  "settings": {
+    "highlights": -0.7,
+    "shadows": 0.6,
+    "whites": -0.05,
+    "blacks": 0.05,
+    "clarity": 0.2,
+    "texture": 0.1,
+    "vibrance": 0.15
+  }
+}

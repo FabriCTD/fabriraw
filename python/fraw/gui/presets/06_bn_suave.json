@@ -1,0 +1,28 @@
+{
+  "fraw_preset": 1,
+  "name": "B&N suave",
+  "group": "Blanco y negro",
+  "settings": {
+    "saturation": 0.0,
+    "contrast": -0.1,
+    "highlights": -0.2,
+    "shadows": 0.2,
+    "curve_master": [
+      [
+        0.0,
+        0.06
+      ],
+      [
+        0.5,
+        0.52
+      ],
+      [
+        1.0,
+        0.96
+      ]
+    ],
+    "grade_global_hue": 35.0,
+    "grade_global_sat": 0.06,
+    "grain_amount": 0.1
+  }
+}

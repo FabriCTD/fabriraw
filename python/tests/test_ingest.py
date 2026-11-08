@@ -308,7 +308,7 @@ class TestFromFake:
         assert f.color.as_shot_wb == (2.0, 1.0, 1.5, 1.0)
         assert f.color.illuminant == 21 and f.color.flags == 3
         assert f.thumbnail is None
-        assert f.meta["software"] == "CTD Photo Studio 0.1.0"
+        assert f.meta["software"] == "CTD Photo Studio 0.2.0"
 
     @pytest.mark.parametrize("top, left", [(0, 0), (1, 0), (0, 1), (1, 1), (3, 5), (2, 7)])
     def test_odd_margins_cfa_matches_raw_color(self, top, left):
@@ -673,7 +673,7 @@ class TestRealRaw:
         np.testing.assert_allclose(np.asarray(c.rgb_cam).reshape(3, 3).sum(axis=1), 1.0, atol=1e-4)
         m = f.meta
         assert m["source_file"] == src.name and m["source_format"] == src.suffix[1:].upper()
-        assert m["software"] == "CTD Photo Studio 0.1.0"
+        assert m["software"] == "CTD Photo Studio 0.2.0"
         assert m.get("make") and m.get("model")
 
     def test_thumbnail_decodable(self, src):

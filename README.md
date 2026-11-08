@@ -17,7 +17,7 @@
 | **Core C++20** | `core/` | `libfraw`: structs empaquetados (`#pragma pack`), `FRAWContainer`, `FRAWSet`, CRC-32, zlib, herramienta `fraw-info`. |
 | **Paquete Python** | `python/fraw/` | Lector/escritor espejo del C++ (`format.py`, `fset.py`), ingesta con LibRaw/rawpy (`ingest.py`), motor de revelado (`processor.py`, `demosaic.py`, `devparams.py`). |
 | **CLI** | `ctd-raw` | `ingest`, `burst`, `info`, `develop`, `dev`, `extract-thumb`, `verify`. |
-| **GUI** | `ctd-studio` | PySide6, modo oscuro, preview en vivo (~54 actualizaciones/s en un RAW de 24 MP), histograma, cuentagotas de WB, revelado no destructivo. |
+| **GUI** | `ctd-studio` | Revelador profesional en PySide6: 107 ajustes en 10 categorías (slider + valor escribible), curvas, HSL, gradación de color, enfoque y ruido, óptica, recorte/enderezado/perspectiva, viñeta y grano, historial, presets, antes/después, aviso de recortes, estrellas y exportación por lotes. Todo no destructivo en el chunk `DEV `. |
 | **Portable** | `packaging/` | PyInstaller onedir → `CTD-Photo-Studio-Portable-win64.zip` (CTDPhotoStudio.exe + ctd-raw.exe). |
 | **Web** | `web/` | Landing estática de fraw.fabrictd.com (Netlify). |
 
@@ -33,7 +33,7 @@ cada chunk = id(4) flags(4) length(8) payload crc32(4)
 * `META`: JSON con cámara, lente, ISO, exposición…
 * `COLR` (112 B): balance de blancos y matrices cámara→sRGB / XYZ→cámara.
 * `THMB`: miniatura JPEG/RGB8. `DATA`: mosaico `u16` (opcionalmente zlib).
-* `DEV `: parámetros de revelado en JSON — editar sólo reescribe la cola del archivo.
+* `DEV `: parámetros de revelado en JSON (DEV v2: 107 ajustes, ver [docs/DEV_PARAMS.md](docs/DEV_PARAMS.md)) — editar sólo reescribe la cola del archivo.
 * `.frw` = mismo formato con extensión corta; `.fset` = ráfaga de N `.fraw`.
 
 Detalles normativos (offsets, errores, validaciones) en [docs/SPEC.md](docs/SPEC.md).
@@ -50,7 +50,7 @@ Detalles normativos (offsets, errores, validaciones) en [docs/SPEC.md](docs/SPEC
 pip install "fabriraw[gui,ingest] @ git+https://github.com/FabriCTD/fabriraw#subdirectory=python"
 ctd-raw ingest IMG_0001.CR3 -o foto.fraw
 ctd-raw info foto.fraw
-ctd-raw develop foto.fraw -o foto.jpg --ev +0.7 --wb daylight
+ctd-raw develop foto.fraw -o foto.jpg --ev +0.7 --wb daylight --set clarity=0.3 --auto-tone --long-edge 2048
 ctd-studio
 ```
 
@@ -71,7 +71,7 @@ pip install pyinstaller
 python packaging/build_portable.py
 ```
 
-Estado al momento de la primera versión: **ctest 13/13**, **pytest 310/310**. El `golden.fraw` generado por C++ y por Python es idéntico byte a byte (SHA-256 `5e22137d…dda3e`), y la ingesta se verificó con RAW reales de Sony A6000 (ARW), Nikon D3200 (NEF) y Canon EOS M50 (CR3) de [raw.pixls.us](https://raw.pixls.us) (CC0).
+Estado en la v0.2.0: **ctest 13/13**, **pytest 531 passed**. El `golden.fraw` generado por C++ y por Python es idéntico byte a byte (SHA-256 `5e22137d…dda3e`), y la ingesta se verificó con RAW reales de Sony A6000 (ARW), Nikon D3200 (NEF) y Canon EOS M50 (CR3) de [raw.pixls.us](https://raw.pixls.us) (CC0).
 
 ## Cómo se hizo
 

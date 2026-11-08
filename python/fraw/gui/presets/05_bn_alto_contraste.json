@@ -1,0 +1,32 @@
+{
+  "fraw_preset": 1,
+  "name": "B&N alto contraste",
+  "group": "Blanco y negro",
+  "settings": {
+    "saturation": 0.0,
+    "contrast": 0.45,
+    "whites": 0.15,
+    "blacks": -0.2,
+    "clarity": 0.25,
+    "curve_master": [
+      [
+        0.0,
+        0.0
+      ],
+      [
+        0.25,
+        0.18
+      ],
+      [
+        0.75,
+        0.84
+      ],
+      [
+        1.0,
+        1.0
+      ]
+    ],
+    "grain_amount": 0.15,
+    "grain_size": 0.25
+  }
+}

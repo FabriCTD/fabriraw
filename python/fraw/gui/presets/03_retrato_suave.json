@@ -1,0 +1,21 @@
+{
+  "fraw_preset": 1,
+  "name": "Retrato suave",
+  "group": "Retrato",
+  "settings": {
+    "exposure_ev": 0.1,
+    "contrast": -0.1,
+    "highlights": -0.2,
+    "shadows": 0.15,
+    "texture": -0.2,
+    "clarity": -0.12,
+    "vibrance": 0.08,
+    "hsl_orange_s": -0.1,
+    "hsl_orange_l": 0.1,
+    "hsl_red_s": -0.05,
+    "grade_highlights_hue": 40.0,
+    "grade_highlights_sat": 0.08,
+    "sharpen_amount": 0.2,
+    "sharpen_masking": 0.5
+  }
+}

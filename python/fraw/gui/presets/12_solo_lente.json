@@ -1,0 +1,11 @@
+{
+  "fraw_preset": 1,
+  "name": "Sólo corregir lente",
+  "group": "Corrección",
+  "settings": {
+    "lens_distortion": 0.1,
+    "lens_vignette": 0.25,
+    "ca_red_cyan": 0.1,
+    "defringe": 0.3
+  }
+}

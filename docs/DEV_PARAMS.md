@@ -2,7 +2,7 @@
 
 > Generado desde `python/fraw/devparams.py` (`SCHEMA`), que es la fuente de verdad. Valores tal como se guardan en el JSON del chunk `DEV ` (la columna *UI ×* indica el factor con que la interfaz los muestra).
 
-Reglas: claves ausentes = defecto; fuera de rango = se recorta; tipo inválido = defecto; claves desconocidas = se ignoran. Un archivo DEV v1 es un DEV v2 válido.
+Reglas: claves ausentes = defecto; fuera de rango = se recorta; tipo inválido = defecto; claves desconocidas = se ignoran. Un archivo DEV v1 es un DEV v2 válido. Con todos los valores en su defecto, el revelado es idéntico al de DEV v1.
 
 ## Básico (`basic`)
 
@@ -91,13 +91,13 @@ Reglas: claves ausentes = defecto; fuera de rango = se recorta; tipo inválido =
 
 | Clave | Nombre | Tipo | Rango | Defecto | UI × | Sección |
 |---|---|---|---|---|---|---|
-| `sharpen_amount` | Cantidad | float | 0 … 1.5 | `0.25` | 100 | Enfoque |
+| `sharpen_amount` | Cantidad | float | 0 … 1.5 | `0.0` | 100 | Enfoque |
 | `sharpen_radius` | Radio | float | 0.5 … 3 px | `1.0` | 1 | Enfoque |
 | `sharpen_detail` | Detalle | float | 0 … 1 | `0.25` | 100 | Enfoque |
 | `sharpen_masking` | Máscara | float | 0 … 1 | `0.0` | 100 | Enfoque |
 | `nr_luminance` | Luminancia | float | 0 … 1 | `0.0` | 100 | Reducción de ruido |
 | `nr_luminance_detail` | Detalle de luminancia | float | 0 … 1 | `0.5` | 100 | Reducción de ruido |
-| `nr_color` | Color | float | 0 … 1 | `0.25` | 100 | Reducción de ruido |
+| `nr_color` | Color | float | 0 … 1 | `0.0` | 100 | Reducción de ruido |
 | `nr_color_detail` | Detalle de color | float | 0 … 1 | `0.5` | 100 | Reducción de ruido |
 
 ## Óptica (`optics`)

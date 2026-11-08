@@ -1,0 +1,19 @@
+{
+  "fraw_preset": 1,
+  "name": "Paisaje",
+  "group": "Color",
+  "settings": {
+    "contrast": 0.15,
+    "highlights": -0.4,
+    "shadows": 0.25,
+    "clarity": 0.2,
+    "dehaze": 0.15,
+    "vibrance": 0.3,
+    "hsl_blue_s": 0.15,
+    "hsl_blue_l": -0.12,
+    "hsl_green_s": 0.1,
+    "hsl_aqua_s": 0.1,
+    "sharpen_amount": 0.4,
+    "sharpen_masking": 0.3
+  }
+}

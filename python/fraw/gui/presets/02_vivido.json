@@ -1,0 +1,16 @@
+{
+  "fraw_preset": 1,
+  "name": "Vívido",
+  "group": "Color",
+  "settings": {
+    "contrast": 0.22,
+    "highlights": -0.25,
+    "shadows": 0.18,
+    "whites": 0.08,
+    "blacks": -0.08,
+    "vibrance": 0.35,
+    "saturation": 1.1,
+    "clarity": 0.15,
+    "dehaze": 0.08
+  }
+}

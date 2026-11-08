@@ -171,7 +171,7 @@ def _build_schema() -> tuple[ParamSpec, ...]:
         _pct("grade_blending", "Fusión", "grading", 0.0, 1.0, 0.5, section="Ajustes"),
         _pct("grade_balance", "Equilibrio", "grading", section="Ajustes"),
         # ------------------------------------------------------------- Detalle
-        _f("sharpen_amount", "Cantidad", "detail", 0, 1.5, 0.25, step=0.01, decimals=0, ui_scale=100.0,
+        _f("sharpen_amount", "Cantidad", "detail", 0, 1.5, 0.0, step=0.01, decimals=0, ui_scale=100.0,
            section="Enfoque"),
         _f("sharpen_radius", "Radio", "detail", 0.5, 3.0, 1.0, step=0.1, decimals=1, unit="px", section="Enfoque"),
         _pct("sharpen_detail", "Detalle", "detail", 0.0, 1.0, 0.25, section="Enfoque"),
@@ -179,7 +179,7 @@ def _build_schema() -> tuple[ParamSpec, ...]:
              tooltip="Limita el enfoque a los bordes"),
         _pct("nr_luminance", "Luminancia", "detail", 0.0, 1.0, 0.0, section="Reducción de ruido"),
         _pct("nr_luminance_detail", "Detalle de luminancia", "detail", 0.0, 1.0, 0.5, section="Reducción de ruido"),
-        _pct("nr_color", "Color", "detail", 0.0, 1.0, 0.25, section="Reducción de ruido"),
+        _pct("nr_color", "Color", "detail", 0.0, 1.0, 0.0, section="Reducción de ruido"),
         _pct("nr_color_detail", "Detalle de color", "detail", 0.0, 1.0, 0.5, section="Reducción de ruido"),
         # -------------------------------------------------------------- Óptica
         _pct("lens_distortion", "Distorsión", "optics", section="Corrección de lente",

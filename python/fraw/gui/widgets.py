@@ -1,93 +1,13 @@
-"""Small custom widgets: reset-on-double-click slider rows and the RGB histogram."""
+"""Histograma RGB + luminancia con triángulos de recorte clicables, y utilidades."""
 
 from __future__ import annotations
 
 import numpy as np
-from PySide6.QtCore import QPointF, Qt, Signal
-from PySide6.QtGui import QColor, QPainter, QPainterPath, QPen
-from PySide6.QtWidgets import QHBoxLayout, QLabel, QSizePolicy, QSlider, QVBoxLayout, QWidget
+from PySide6.QtCore import QPointF, QRectF, Qt, Signal
+from PySide6.QtGui import QColor, QPainter, QPainterPath, QPen, QPolygonF
+from PySide6.QtWidgets import QSizePolicy, QWidget
 
-__all__ = ["ResetSlider", "SliderRow", "Histogram", "histogram_rgb"]
-
-
-class ResetSlider(QSlider):
-    """QSlider that returns to its default value on double click."""
-
-    reset = Signal()
-
-    def __init__(self, default: int, parent: QWidget | None = None):
-        super().__init__(Qt.Orientation.Horizontal, parent)
-        self.default = default
-
-    def mouseDoubleClickEvent(self, e):  # noqa: N802 (Qt API)
-        self.setValue(self.default)
-        self.reset.emit()
-        e.accept()
-
-
-class SliderRow(QWidget):
-    """Label + value + slider for one float DEV parameter.
-
-    ``valueChanged(float)`` is emitted with the real (scaled) value.
-    """
-
-    valueChanged = Signal(float)
-
-    def __init__(self, label: str, lo: float, hi: float, default: float, step: float = 0.01,
-                 fmt: str = "{:+.2f}", parent: QWidget | None = None):
-        super().__init__(parent)
-        self.lo, self.hi, self.step, self.fmt = lo, hi, step, fmt
-        self.default_value = default
-        lay = QVBoxLayout(self)
-        lay.setContentsMargins(0, 2, 0, 2)
-        lay.setSpacing(2)
-        top = QHBoxLayout()
-        top.setSpacing(4)
-        self.name = QLabel(label)
-        self.value_label = QLabel()
-        self.value_label.setObjectName("sliderValue")
-        self.value_label.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
-        top.addWidget(self.name)
-        top.addStretch(1)
-        top.addWidget(self.value_label)
-        lay.addLayout(top)
-        self.slider = ResetSlider(self._to_int(default))
-        self.slider.setRange(self._to_int(lo), self._to_int(hi))
-        self.slider.setValue(self._to_int(default))
-        self.slider.setSingleStep(1)
-        self.slider.setPageStep(max(1, int(round(0.25 / step))))
-        self.slider.setToolTip("Doble click para restablecer")
-        if lo < 0 < hi:
-            self.slider.setObjectName("centered")
-        lay.addWidget(self.slider)
-        self.slider.valueChanged.connect(self._changed)
-        self._update_label()
-
-    def _to_int(self, v: float) -> int:
-        return int(round(v / self.step))
-
-    def value(self) -> float:
-        return round(self.slider.value() * self.step, 6)
-
-    def setValue(self, v: float) -> None:  # noqa: N802 (Qt naming)
-        v = min(max(float(v), self.lo), self.hi)
-        self.slider.setValue(self._to_int(v))
-        self._update_label()
-
-    def set_silently(self, v: float) -> None:
-        self.slider.blockSignals(True)
-        self.setValue(v)
-        self.slider.blockSignals(False)
-
-    def reset(self) -> None:
-        self.setValue(self.default_value)
-
-    def _update_label(self) -> None:
-        self.value_label.setText(self.fmt.format(self.value()))
-
-    def _changed(self, _i: int) -> None:
-        self._update_label()
-        self.valueChanged.emit(self.value())
+__all__ = ["Histogram", "histogram_rgb"]
 
 
 def histogram_rgb(img: np.ndarray, bins: int = 256, max_samples: int = 150_000) -> np.ndarray:
@@ -99,24 +19,60 @@ def histogram_rgb(img: np.ndarray, bins: int = 256, max_samples: int = 150_000) 
 
 
 class Histogram(QWidget):
-    """Live RGB histogram (additive overlay, sqrt-scaled)."""
+    """RGB (aditivo) + luminancia, escala raíz. Triángulos arriba a izquierda/derecha:
+    se encienden si hay recorte de sombras/luces; click alterna el aviso en la foto."""
 
     COLORS = ((235, 72, 77), (63, 185, 80), (76, 141, 255))
+    clipToggled = Signal(str, bool)  # "shadows" | "highlights", on
 
     def __init__(self, parent: QWidget | None = None):
         super().__init__(parent)
-        self.setMinimumHeight(110)
-        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
+        self.setMinimumHeight(120)
+        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
         self._h: np.ndarray | None = None
+        self._l: np.ndarray | None = None
+        self.clip_sh = 0.0
+        self.clip_hl = 0.0
+        self.show_sh = False
+        self.show_hl = False
+        self.info = ""
+        self.setMouseTracking(True)
+        self.setToolTip("Histograma · click en los triángulos: mostrar recorte de sombras / luces (J)")
 
-    def set_data(self, h: np.ndarray | None) -> None:
-        self._h = h
+    def set_data(self, h) -> None:
+        if isinstance(h, dict):
+            self._h = np.stack([np.asarray(h[c], dtype=np.float32)[:256] for c in "rgb"])
+            self._l = np.asarray(h.get("l"), dtype=np.float32)[:256] if h.get("l") is not None else None
+            self.clip_sh = float(h.get("clip_shadows", 0.0) or 0.0)
+            self.clip_hl = float(h.get("clip_highlights", 0.0) or 0.0)
+        else:
+            self._h = h
+            self._l = None
         self.update()
+
+    def set_clip_state(self, sh: bool, hl: bool) -> None:
+        self.show_sh, self.show_hl = sh, hl
+        self.update()
+
+    def _tri_rects(self) -> tuple[QRectF, QRectF]:
+        r = self.rect().adjusted(1, 1, -1, -1)
+        return QRectF(r.left() + 4, r.top() + 4, 14, 12), QRectF(r.right() - 18, r.top() + 4, 14, 12)
+
+    def mousePressEvent(self, e):  # noqa: N802
+        a, b = self._tri_rects()
+        if a.adjusted(-4, -4, 4, 4).contains(e.position()):
+            self.show_sh = not self.show_sh
+            self.clipToggled.emit("shadows", self.show_sh)
+            self.update()
+        elif b.adjusted(-4, -4, 4, 4).contains(e.position()):
+            self.show_hl = not self.show_hl
+            self.clipToggled.emit("highlights", self.show_hl)
+            self.update()
 
     def paintEvent(self, _e):  # noqa: N802 (Qt API)
         p = QPainter(self)
         p.setRenderHint(QPainter.RenderHint.Antialiasing)
-        r = self.rect().adjusted(1, 1, -1, -1)
+        r = QRectF(self.rect()).adjusted(1, 1, -1, -1)
         p.setPen(QPen(QColor("#2E2D33"), 1))
         p.setBrush(QColor("#0E0D12"))
         p.drawRoundedRect(r, 8, 8)
@@ -124,24 +80,53 @@ class Histogram(QWidget):
         for i in (1, 2, 3):
             x = r.left() + r.width() * i / 4
             p.drawLine(QPointF(x, r.top() + 4), QPointF(x, r.bottom() - 4))
+        self._paint_triangles(p)
         if self._h is None:
+            p.end()
             return
         h = np.sqrt(self._h)
         top = float(h[:, 1:-1].max()) if h.shape[1] > 2 else float(h.max())
-        if top <= 0:
-            return
-        p.setCompositionMode(QPainter.CompositionMode.CompositionMode_Plus)
-        w, hh = r.width() - 8, r.height() - 8
+        w, hh = r.width() - 8, r.height() - 22
         x0, y0 = r.left() + 4, r.bottom() - 4
         n = h.shape[1]
-        for c, (cr, cg, cb) in enumerate(self.COLORS):
-            path = QPainterPath(QPointF(x0, y0))
-            for i in range(n):
-                v = min(1.0, h[c, i] / top)
-                path.lineTo(QPointF(x0 + w * i / (n - 1), y0 - hh * v))
-            path.lineTo(QPointF(x0 + w, y0))
-            path.closeSubpath()
-            p.setPen(Qt.PenStyle.NoPen)
-            p.setBrush(QColor(cr, cg, cb, 150))
-            p.drawPath(path)
+        if top > 0:
+            p.setCompositionMode(QPainter.CompositionMode.CompositionMode_Plus)
+            for c, (cr, cg, cb) in enumerate(self.COLORS):
+                path = QPainterPath(QPointF(x0, y0))
+                for i in range(n):
+                    v = min(1.0, h[c, i] / top)
+                    path.lineTo(QPointF(x0 + w * i / (n - 1), y0 - hh * v))
+                path.lineTo(QPointF(x0 + w, y0))
+                path.closeSubpath()
+                p.setPen(Qt.PenStyle.NoPen)
+                p.setBrush(QColor(cr, cg, cb, 140))
+                p.drawPath(path)
+            p.setCompositionMode(QPainter.CompositionMode.CompositionMode_SourceOver)
+            if self._l is not None:
+                lv = np.sqrt(self._l)
+                lt = float(lv[1:-1].max()) if lv.size > 2 else float(lv.max())
+                if lt > 0:
+                    path = QPainterPath(QPointF(x0, y0 - hh * min(1.0, lv[0] / lt)))
+                    for i in range(1, len(lv)):
+                        path.lineTo(QPointF(x0 + w * i / (len(lv) - 1), y0 - hh * min(1.0, lv[i] / lt)))
+                    p.setPen(QPen(QColor(237, 235, 240, 190), 1.2))
+                    p.setBrush(Qt.BrushStyle.NoBrush)
+                    p.drawPath(path)
+        if self.info:
+            p.setPen(QColor("#A6A3AD"))
+            p.drawText(r.adjusted(24, 2, -24, 0), Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignHCenter, self.info)
         p.end()
+
+    def _paint_triangles(self, p: QPainter) -> None:
+        a, b = self._tri_rects()
+        for rect, frac, on, col, left in ((a, self.clip_sh, self.show_sh, QColor(64, 128, 255), True),
+                                          (b, self.clip_hl, self.show_hl, QColor(255, 72, 72), False)):
+            poly = QPolygonF([rect.topLeft(), rect.topRight(), rect.bottomLeft()] if left
+                             else [rect.topLeft(), rect.topRight(), rect.bottomRight()])
+            active = frac > 0.0005
+            fill = QColor(col) if active else QColor("#45434C")
+            if not on and active:
+                fill.setAlpha(150)
+            p.setPen(QPen(QColor("#EDEBF0") if on else QColor("#2E2D33"), 1))
+            p.setBrush(fill)
+            p.drawPolygon(poly)

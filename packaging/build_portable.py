@@ -48,10 +48,15 @@ CÓMO USAR
    No requiere instalación ni permisos de administrador.
 2. Abrí la carpeta "CTD Photo Studio" y ejecutá CTDPhotoStudio.exe.
 3. "Importar RAW" convierte fotos de cámara (CR3, CR2, NEF, ARW, DNG, RAF*, ORF, RW2,
-   PEF…) a .fraw; "Abrir" abre .fraw / .frw / .fset. Ajustá con los controles de la
-   derecha (doble click en un control = restablecer) y usá "Guardar revelado" (Ctrl+S)
-   para guardar los ajustes dentro del .fraw sin tocar los datos del sensor.
-   "Exportar" genera JPEG, PNG o TIFF (8/16 bits).
+   PEF…) a .fraw; "Abrir" abre .fraw / .frw / .fset. El panel "Revelado" tiene 10
+   categorías (Básico, Curva de tonos, HSL, Gradación de color, Detalle, Óptica,
+   Geometría y recorte, Efectos, Calibración, Proceso): cada ajuste se mueve con el
+   deslizador o escribiendo el valor (Enter); doble click = restablecer. Hay curvas
+   de puntos, ruedas de color, recorte (R), Antes/Después (\\ e Y), historial con
+   deshacer (Ctrl+Z), presets, copiar/pegar ajustes y estrellas (teclas 0-5).
+   Todos los atajos: Ayuda > Atajos de teclado (Ctrl+/).
+   "Guardar revelado" (Ctrl+S) guarda los ajustes dentro del .fraw sin tocar los datos
+   del sensor. "Exportar" genera JPEG, PNG o TIFF (8/16 bits), también por lotes.
    (*) Sólo sensores Bayer: los X-Trans de Fujifilm no están soportados.
 
 Mantené juntos CTDPhotoStudio.exe, ctd-raw.exe y la carpeta _internal: los .exe no
@@ -74,8 +79,10 @@ Ayuda completa: ctd-raw.exe --help  ·  ctd-raw.exe develop --help
 DATOS DE USUARIO
 ----------------
 * El programa no escribe nada dentro de su propia carpeta.
-* Preferencias (última carpeta, tamaño de la ventana) en el registro de Windows,
+* Preferencias (última carpeta, diseño de paneles) en el registro de Windows,
   sólo de tu usuario: HKEY_CURRENT_USER\\Software\\FabriCTD\\CTD Photo Studio.
+* Tus presets (.fpreset) van a %APPDATA%\\FabriCTD\\CTD Photo Studio\\presets.
+* La calificación y la marca de color se guardan en el chunk META de cada .fraw.
 * Asociar .fraw/.frw/.fset con el programa es opcional (menú Herramientas) y se guarda
   en HKEY_CURRENT_USER\\Software\\Classes; "Quitar asociación" lo deshace.
 * Para desinstalar: "Quitar asociación" (si la hiciste) y borrá la carpeta. Opcional:

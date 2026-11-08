@@ -350,9 +350,25 @@ def cmd_develop(a: argparse.Namespace) -> int:
         d.update(_parse_gamma(a.gamma))
     if a.demosaic:
         d["demosaic"] = a.demosaic
-    params = DevParams.from_dict(d)
+    from .devparams import SPECS
+
+    for item in getattr(a, "set_", None) or []:
+        if "=" not in item:
+            raise CliError(f"--set espera CLAVE=VALOR, no {item!r}")
+        k, raw = item.split("=", 1)
+        k = k.strip()
+        if k not in SPECS:
+            raise CliError(f"clave DEV desconocida {k!r}")
+        d[k] = _parse_set_value(raw.strip())
     proc = FRAWProcessor(f)
-    proc.export(out, params, bits=a.bits, quality=a.quality, half_size=a.half)
+    if getattr(a, "auto_wb", False):
+        d.update(proc.auto_wb())
+        d["temperature_shift"] = d["tint_shift"] = 0.0
+    if getattr(a, "auto_tone", False):
+        d.update(proc.auto_tone(DevParams.from_dict(d)))
+    params = DevParams.from_dict(d)
+    proc.export(out, params, bits=a.bits, quality=a.quality, half_size=a.half,
+                long_edge=getattr(a, "long_edge", None), output_sharpen=getattr(a, "output_sharpen", "none"))
     _out(f"{a.file} -> {out}  ({a.bits} bits, demosaico {'superpíxel 1/2' if a.half else params.demosaic})")
     if a.save_dev:
         if kind != "fraw":
@@ -525,6 +541,14 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--bits", type=int, choices=(8, 16), default=8)
     s.add_argument("--quality", type=int, default=95, help="calidad JPEG (1-100)")
     s.add_argument("--half", action="store_true", help="mitad de resolución (superpíxel, rápido)")
+    s.add_argument("--set", action="append", default=[], metavar="CLAVE=VALOR", dest="set_",
+                   help="cualquier ajuste del DEV v2 (repetible), p. ej. --set clarity=0.3 "
+                        "--set curve_master=[[0,0],[0.5,0.6],[1,1]]")
+    s.add_argument("--auto-tone", action="store_true", help="tono automático (exposición, contraste, luces…)")
+    s.add_argument("--auto-wb", action="store_true", help="balance de blancos automático")
+    s.add_argument("--long-edge", type=int, help="redimensiona (Lanczos) al lado largo indicado, en px")
+    s.add_argument("--output-sharpen", choices=("none", "low", "standard", "high"), default="none",
+                   help="enfoque de salida tras el redimensionado")
     s.add_argument("--save-dev", action="store_true", help="guarda los parámetros usados en el DEV del archivo")
     s.set_defaults(func=cmd_develop)
 

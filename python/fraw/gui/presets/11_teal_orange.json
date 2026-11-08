@@ -1,0 +1,21 @@
+{
+  "fraw_preset": 1,
+  "name": "Teal & orange",
+  "group": "Creativos",
+  "settings": {
+    "contrast": 0.12,
+    "vibrance": 0.1,
+    "hsl_orange_s": 0.15,
+    "hsl_orange_l": 0.05,
+    "hsl_aqua_h": 0.15,
+    "hsl_blue_h": -0.2,
+    "hsl_blue_s": 0.1,
+    "hsl_green_h": 0.3,
+    "hsl_green_s": -0.2,
+    "grade_shadows_hue": 190.0,
+    "grade_shadows_sat": 0.25,
+    "grade_highlights_hue": 35.0,
+    "grade_highlights_sat": 0.2,
+    "grade_balance": -0.1
+  }
+}

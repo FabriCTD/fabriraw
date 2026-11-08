@@ -1,0 +1,20 @@
+{
+  "fraw_preset": 1,
+  "name": "Atardecer",
+  "group": "Creativos",
+  "settings": {
+    "temperature_shift": 0.2,
+    "tint_shift": 0.05,
+    "highlights": -0.3,
+    "shadows": 0.1,
+    "vibrance": 0.25,
+    "hsl_orange_s": 0.15,
+    "hsl_red_s": 0.1,
+    "hsl_yellow_h": -0.1,
+    "grade_highlights_hue": 30.0,
+    "grade_highlights_sat": 0.2,
+    "grade_shadows_hue": 280.0,
+    "grade_shadows_sat": 0.08,
+    "vignette_amount": -0.15
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "fraw_preset": 1,
+  "name": "Noche urbana",
+  "group": "Creativos",
+  "settings": {
+    "temperature_shift": -0.12,
+    "contrast": 0.2,
+    "highlights": -0.35,
+    "shadows": 0.15,
+    "blacks": -0.1,
+    "clarity": 0.15,
+    "dehaze": 0.1,
+    "hsl_blue_s": 0.2,
+    "hsl_purple_s": 0.15,
+    "hsl_orange_s": 0.1,
+    "grade_shadows_hue": 220.0,
+    "grade_shadows_sat": 0.15,
+    "nr_luminance": 0.2,
+    "nr_color": 0.4
+  }
+}

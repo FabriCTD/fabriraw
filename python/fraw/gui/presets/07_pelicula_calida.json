@@ -1,0 +1,37 @@
+{
+  "fraw_preset": 1,
+  "name": "Película cálida",
+  "group": "Creativos",
+  "settings": {
+    "temperature_shift": 0.12,
+    "contrast": 0.1,
+    "highlights": -0.2,
+    "vibrance": -0.05,
+    "saturation": 0.95,
+    "curve_master": [
+      [
+        0.0,
+        0.05
+      ],
+      [
+        0.3,
+        0.27
+      ],
+      [
+        0.7,
+        0.74
+      ],
+      [
+        1.0,
+        0.97
+      ]
+    ],
+    "grade_shadows_hue": 200.0,
+    "grade_shadows_sat": 0.1,
+    "grade_highlights_hue": 45.0,
+    "grade_highlights_sat": 0.15,
+    "grain_amount": 0.2,
+    "grain_size": 0.3,
+    "grain_roughness": 0.6
+  }
+}

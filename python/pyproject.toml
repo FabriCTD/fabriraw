@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "fabriraw"
-version = "0.1.0"
+version = "0.2.0"
 description = "FabriRAW (.fraw) open RAW format and CTD Photo Studio tools by FabriCTD"
 readme = { text = "FabriRAW (.fraw / .frw / .fset) reference implementation. See https://fraw.fabrictd.com", content-type = "text/plain" }
 requires-python = ">=3.10"
@@ -29,7 +29,7 @@ where = ["."]
 include = ["fraw*"]
 
 [tool.setuptools.package-data]
-"fraw.gui" = ["theme.qss", "icon.png"]
+"fraw.gui" = ["theme.qss", "icon.png", "presets/*.json"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

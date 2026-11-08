@@ -1,0 +1,14 @@
+{
+  "fraw_preset": 1,
+  "name": "Natural",
+  "group": "Color",
+  "settings": {
+    "contrast": 0.08,
+    "highlights": -0.15,
+    "shadows": 0.12,
+    "vibrance": 0.12,
+    "clarity": 0.05,
+    "sharpen_amount": 0.3,
+    "nr_color": 0.25
+  }
+}
