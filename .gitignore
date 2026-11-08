@@ -10,3 +10,4 @@ dist/
 
 # Camera RAW samples for ingest integration tests (downloaded, not versioned)
 python/tests/fixtures_ingest/raw/
+.netlify/
