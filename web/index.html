@@ -14,7 +14,7 @@
   <link rel="alternate" hreflang="es" href="https://fraw.fabrictd.com/">
   <link rel="alternate" hreflang="x-default" href="https://fraw.fabrictd.com/">
   <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="/styles.css?v=1.0.1">
+  <link rel="stylesheet" href="/styles.css?v=1.0.2">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="FabriRAW · CTD Photo Studio">
   <meta property="og:locale" content="es_AR">
@@ -534,12 +534,18 @@ END   (CRITICAL) length 0</code></pre>
       <div class="wrap">
         <p class="eyebrow"><span data-l="es">Descargas</span><span data-l="en" lang="en">Downloads</span></p>
         <h2 id="dl-title" class="h2"><span data-l="es">Gratis, sin cuentas ni instaladores raros</span><span data-l="en" lang="en">Free, no accounts, no weird installers</span></h2>
-        <div class="mt-10 grid gap-4 lg:grid-cols-3">
+        <div class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <div class="card flex flex-col">
             <h3 class="text-lg font-semibold">Windows · Portable</h3>
             <p class="mt-2 flex-1 text-sm text-mute" data-l="es">ZIP de 64 bits: descomprimir y ejecutar. Incluye la GUI <code>ctd-studio</code> y la CLI <code>ctd-raw</code>.</p>
             <p class="mt-2 flex-1 text-sm text-mute" data-l="en" lang="en">64-bit ZIP: unzip and run. Includes the <code>ctd-studio</code> GUI and the <code>ctd-raw</code> CLI.</p>
             <a class="btn-primary mt-5" href="https://github.com/FabriCTD/fabriraw/releases/latest/download/CTD-Photo-Studio-Portable-win64.zip">CTD-Photo-Studio-Portable-win64.zip</a>
+          </div>
+          <div class="card flex flex-col">
+            <h3 class="text-lg font-semibold"><span data-l="es">Archivo de muestra</span><span data-l="en" lang="en">Sample file</span></h3>
+            <p class="mt-2 flex-1 text-sm text-mute" data-l="es">¿Tu cámara sólo saca JPG? Prueba con un <code>.fraw</code> real (Sony A6000, 30&nbsp;MB, CC0 de raw.pixls.us) con un revelado de ejemplo incluido.</p>
+            <p class="mt-2 flex-1 text-sm text-mute" data-l="en" lang="en">Camera only shoots JPG? Try a real <code>.fraw</code> (Sony A6000, 30&nbsp;MB, CC0 from raw.pixls.us) with an example develop included.</p>
+            <a class="btn-ghost mt-5" href="https://github.com/FabriCTD/fabriraw/releases/download/samples/FabriRAW-sample-SonyA6000.fraw">FabriRAW-sample-SonyA6000.fraw</a>
           </div>
           <div class="card flex flex-col">
             <h3 class="text-lg font-semibold"><span data-l="es">Todas las versiones</span><span data-l="en" lang="en">All releases</span></h3>
@@ -557,8 +563,8 @@ END   (CRITICAL) length 0</code></pre>
         <div class="mt-6">
           <h3 class="text-base font-semibold"><span data-l="es">Instalar con pip (Python)</span><span data-l="en" lang="en">Install with pip (Python)</span></h3>
           <pre class="codeblock mt-3"><code>pip install "fabriraw[gui,ingest] @ git+https://github.com/FabriCTD/fabriraw#subdirectory=python"</code></pre>
-          <p class="mt-3 text-sm text-mute" data-l="es">Si el enlace de descarga todavía no funciona, es porque aún no se publicó la primera versión: revisa <a class="link" href="https://github.com/FabriCTD/fabriraw/releases">Releases</a> o instala desde el código.</p>
-          <p class="mt-3 text-sm text-mute" data-l="en" lang="en">If the download link does not work yet, the first release has not been published: check <a class="link" href="https://github.com/FabriCTD/fabriraw/releases">Releases</a> or install from source.</p>
+          <p class="mt-3 text-sm text-mute" data-l="es">¿Compacta Canon sin RAW (por ejemplo PowerShot SX)? El proyecto comunitario <a class="link" href="https://chdk.fandom.com/wiki/CHDK">CHDK</a> permite a muchos modelos guardar DNG, que CTD Photo Studio puede importar. Úsalo bajo tu propia responsabilidad.</p>
+          <p class="mt-3 text-sm text-mute" data-l="en" lang="en">Canon compact without RAW (e.g. PowerShot SX)? The community project <a class="link" href="https://chdk.fandom.com/wiki/CHDK">CHDK</a> lets many models save DNG, which CTD Photo Studio can import. Use it at your own risk.</p>
         </div>
       </div>
     </section>

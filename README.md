@@ -42,6 +42,8 @@ Detalles normativos (offsets, errores, validaciones) en [docs/SPEC.md](docs/SPEC
 
 **Windows portable:** descargá el zip, descomprimí y abrí `CTDPhotoStudio.exe`. No requiere instalación.
 
+**¿No tenés cámara RAW?** Bajá el [archivo de muestra](https://github.com/FabriCTD/fabriraw/releases/download/samples/FabriRAW-sample-SonyA6000.fraw) (Sony A6000, 30 MB, CC0 de raw.pixls.us, con un revelado de ejemplo en `DEV `) y abrilo con *Abrir*. En compactas Canon sin RAW (p. ej. PowerShot SX170 IS), el proyecto comunitario [CHDK](https://chdk.fandom.com/wiki/CHDK) permite guardar DNG, que `ctd-raw ingest` acepta (bajo tu responsabilidad).
+
 **Con Python (3.10+):**
 
 ```bash

@@ -12,3 +12,5 @@
 # Discord no tiene URL pública de perfil por nombre de usuario (fabri.ctd);
 # se redirige al sitio principal, donde figura el contacto.
 /discord     https://fabrictd.com  302
+/muestra     https://github.com/FabriCTD/fabriraw/releases/download/samples/FabriRAW-sample-SonyA6000.fraw  302
+/sample      https://github.com/FabriCTD/fabriraw/releases/download/samples/FabriRAW-sample-SonyA6000.fraw  302
